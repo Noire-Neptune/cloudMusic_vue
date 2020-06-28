@@ -68,6 +68,14 @@
           </div>
         </div>
       </div>
+      <div class="comment-content-page">
+        <el-button class="btn" type="primary" size="small" @click="firstPage">首页</el-button>
+        <el-button class="btn" type="primary" size="small" @click="prevPage">上一页</el-button>
+        <el-button class="btn" type="primary" size="small" @click="nextPage">下一页</el-button>
+        <el-button class="btn" type="primary" size="small" @click="lastPage">尾页</el-button>
+        <span>跳转至</span><input v-model="page" placeholder="请输入页数" type="text" /><span>页, 当前第{{pageCount}}页</span>
+        <el-button class="btn" type="primary" size="small" @click="jumpPage">Go</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -83,9 +91,12 @@ export default {
       playTime: 0,//歌曲当前播放时间
       comments:[],//歌曲评论
       danmuList:[],//弹幕数组
-      commentOffset:0,//用于歌曲评论分页, 原理同sql语句的limit第一个值=( 评论页数 -1)*20
+      commentOffset:0,//用于歌曲评论分页, 原理同sql语句的limit第一个值=( 评论页数 -1)*一页的评论数量
       ctx:"",//canvas 2d实例
       commentSum:0,//评论总数
+      page:1,//当前评论页数
+      pageCount:1,//总页数
+      pageSize:20,//一页 的数量
     };
   },
   created() {},
@@ -106,8 +117,8 @@ export default {
       this.commentOffset=0;
       //获取弹幕评论
       //this.getDiscuss(this.g.music.id,this.commentOffset,"danmu")
-      //获取列表评论
-      this.getDiscuss(this.g.music.id,this.commentOffset)
+      //获取列表评论,默认第一页
+      this.getDiscuss(this.g.music.id,0,"",this.pageSize)
       //vue 容器渲染完成触发
       this.$nextTick(() => {
         //计算歌词标题区域高度
@@ -118,21 +129,22 @@ export default {
     getPlayTime(time) {
       this.playTime = time;
     },
-    //获取歌曲评论 op为操作,判断调用该方法获取评论是为了渲染弹幕还是评论
+    //获取歌曲评论 op为操作,判断调用该方法获取评论是为了渲染弹幕还是评论,为空则获取评论
     getDiscuss(id, offset,op,limit, before) {
       this.axios({
         url: this.g.host + "/comment/music",
         params: {
           id: id,
           offset: offset, //用于分页 , 如 :( 评论页数 -1)*20
-          limit: limit,//一页数量,最多100
-          before: before //取上一页最后一条的time
+          limit: limit,//一页数量,最多100,默认20
+          before: before //取上一页最后一条的time,取超过100条评论时用,但是貌似没什么卵用
         }
       })
         .then(res => {
           console.log("歌曲评论", res);
           var list = res.data.comments; 
           this.commentSum=res.data.total;
+          this.pageCount=Math.ceil(this.commentSum/this.pageSize)
           if(op=="danmu"){
             this.danmuList=this.danmuList.concat(list);
             this.$nextTick(()=>{
@@ -247,20 +259,45 @@ export default {
 
       return lyricList;
     },
-    initDanmu(){
-    
-      
-      
+    initDanmu(){},
+    //首页按钮
+    firstPage(){
+      this.page=1;
+      this.getDiscuss(this.g.music.id,0,"",this.pageSize)
+    },
+    //跳页
+    jumpPage(){
+      this.getDiscuss(this.g.music.id,(this.page-1)*this.pageSize,"",this.pageSize)
+    },
+    prevPage(){
+      if(this.page<=1){
+        alert("已经是第一页了")
+        return;
+      }
+      this.page--;
+      this.getDiscuss(this.g.music.id,(this.page-1)*this.pageSize,"",this.pageSize)
+    },
+    nextPage(){
+      if(this.page>=this.pageCount){
+        alert("已经是第最后一页了");
+        return;
+      }
+      this.page++;
+      this.getDiscuss(this.g.music.id,(this.page-1)*this.pageSize,"",this.pageSize)
+    },
+    lastPage(){
+      this.page=this.pageCount;
+       this.getDiscuss(this.g.music.id,(this.page-1)*this.pageSize,"",this.pageSize)
     },
     //时间戳返回年月日
     timeToStr(time){
       var date=new Date(time);
       var y=date.getFullYear();
-      var m=date.getMonth()+1 >10 ? date.getMonth()+1 : "0"+(date.getMonth()+1);
+      var m=date.getMonth()+1 >=10 ? date.getMonth()+1 : "0"+(date.getMonth()+1);
       var d=date.getDate();
-      var h=date.getHours() >10 ? date.getHours() : "0"+date.getHours();
-      var min=date.getMinutes() >10 ? date.getMinutes() : "0"+date.getMinutes();
-      var s=date.getSeconds() >10 ? date.getSeconds() : "0"+date.getSeconds();
+      var h=date.getHours() >=10 ? date.getHours() : "0"+date.getHours();
+      var min=date.getMinutes() >=10 ? date.getMinutes() : "0"+date.getMinutes();
+      var s=date.getSeconds() >=10 ? date.getSeconds() : "0"+date.getSeconds();
       return y+"年"+m+"月"+d+"日"+" "+h+":"+min+":"+s
     }
   },

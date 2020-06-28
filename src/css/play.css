@@ -1,8 +1,11 @@
 .content{
+    height: 100%;
     padding: 1.5rem;
+    padding-right: 0;
+    padding-bottom: 0;
 }
 .music-content{
-    height: 50rem;
+    height: 40rem;
 }
 .music-content-picContent,.music-content-geciContent{
     float: left;
@@ -96,8 +99,11 @@
      color: red;
  }
  .comment-content{
-     margin-top: 1.5rem;
+     height: calc(100% - 48rem);
+     overflow: auto;
+     /* padding-top: 1.5rem; */
  }
+
  .comment-content-title{
      
      border-bottom: 1px solid gray;
@@ -132,6 +138,23 @@
  }
  .comment-content-comments-item-userComment-op{
      margin-top: 0.5rem;
+ }
+ .comment-content-page{
+     padding: 1rem 0;
+     text-align: center;
+ }
+ .comment-content-page input{
+     width: 5rem;
+     height: 2.2rem;
+     border: 1px solid rgb(204,204,204);
+     border-radius: 5px;
+ }
+ .comment-content-page span{
+    padding:  0 0.5rem;
+ }
+ .comment-content-page .btn,.comment-content-page span,.comment-content-page input{
+     display: inline-block;
+     vertical-align: middle;
  }
  
   /* 旋转动画 */
