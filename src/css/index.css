@@ -1,0 +1,225 @@
+.clearfix{
+  display: block;
+  content: "";
+  clear: both;
+}
+.login-alert {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40rem;
+    height: 40rem;
+    z-index: 100;
+    background: rgb(209, 205, 205);
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+  }
+  .login-alert-title {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 2.2rem;
+  }
+  .login-alert-form {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .login-alert-form input {
+    display: block;
+    width: 80%;
+    margin: 1.3rem auto;
+    height: 2.5rem;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 3px;
+  }
+  .login-alert-btn {
+    width: 100%;
+    position: absolute;
+    bottom: 10%;
+    text-align: center;
+  }
+  .login-alert-btn button {
+    width: 8rem;
+    height: 2.5rem;
+    font-size: 1.1rem;
+    border-radius: 20px;
+    border: 0;
+    cursor: pointer;
+  }
+  .login-alert-btn button:first-child {
+    margin-right: 3rem;
+    background: #20a0ff;
+    color: white;
+  }
+  .play-tuijian,.play-setting{
+    width: calc(100% - 35rem);
+  }
+  .play-list{
+    position: absolute;
+    bottom: 0;
+    width: 35rem;
+    height: 40%;
+    overflow: auto;
+  }
+  .play-list-item{
+      width: 100%;
+     cursor: pointer;
+      margin-bottom: 2em;
+ -webkit-column-break-inside: avoid;
+ break-inside: avoid;
+ height: 5rem;
+  }
+  .play-list-item:last-child{
+    margin-bottom: 0;
+  }
+  .play-list-item-img{
+    float: left;
+    background-repeat: no-repeat;
+ background-position: 50% 50%;
+ background-size: 100%;
+ border-radius: 0.2rem;
+    width: 5rem;
+    height: 100%;
+  }
+  .play-list-item-title{
+    float: left;
+    width: calc(100% - 5rem);
+    padding: 5px;
+    height: 100%;
+  }
+  .play-alert{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 50rem;
+    height: 50rem;
+    padding: 1rem;
+    background: rgb(224, 224, 224,0.8);
+    border-radius: 20px;
+  }
+  .play-alert-cancel{
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    cursor: pointer;
+  }
+  .play-alert-titleContent{
+    height: 8rem;
+    overflow: hidden;
+    margin-bottom: 1.2rem;
+  }
+  .play-alert-titleContent-img{
+    width: 8rem;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: 50%;
+  }
+  .play-alert-titleContent-title{
+    width: calc(100% - 8rem);
+    height: 100%;
+    padding-left: 1rem;
+  }
+  .play-alert-titleContent-title:first-child{
+    margin-bottom: 20px;
+  }
+  .play-alert-titleContent-img,.play-alert-titleContent-title{
+    float: left;
+  }
+  .play-alert-list{
+    height: calc(100% - 8rem);
+    overflow: auto;
+  }
+  .play-alert-list table{
+    width: 100%;
+    overflow: auto;
+    border-collapse: collapse;
+  }
+  .play-alert-list  table td{
+    height: 2rem;
+    border: 1px solid gray;
+    padding: 0 5px;
+  }
+  /* 左侧可伸缩的抽屉 */
+  .leftDrawer,.play-tuijian{
+    float: left;
+    overflow: auto;
+  }
+  .play-tuijian{
+    padding-bottom: 8rem;
+  }
+  .leftDrawer{
+    width: 35rem;
+    background: rgb(224, 224, 224);
+  }
+  .play-alert-list-singer:not(:last-child):after{
+    content: ", ";
+  }
+  .play-setting{
+    position: fixed;
+    bottom: 0;
+    height: 8rem;
+    background: gray;
+  }
+  .play-setting-songImg{
+    float: left;
+    width: 8rem;
+    height: 8rem;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+  }
+  .play-settings-title,.play-settings-sliderContent,.play-settings-controll{
+    float: left;
+    width: calc(100% - 11rem);
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+  .play-settings-sliderContent{
+    position: relative;
+    height: 2.5rem;
+  }
+  .play-settings-sliderContent-currentTime,.play-settings-sliderContent-endTime,.play-settings-sliderContent-slider{
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .play-settings-sliderContent-currentTime,.play-settings-sliderContent-endTime{
+    
+    width: 3.5rem;
+  }
+  .play-settings-sliderContent-currentTime{
+    padding-right: 0.5rem;
+    text-align: right;
+  }
+  .play-settings-sliderContent-endTime{
+    padding-left: 0.5rem;
+  }
+  .play-settings-sliderContent-slider{
+    width: calc(100% - 7rem);
+  }
+  .play-settings-title{
+    height: 2rem;
+  }
+  .play-settings-title span{
+    font-size: 1.2rem;
+    line-height: 2rem;
+    vertical-align: middle;
+  }
+ 
+  .play-settings-controll{
+    height: 3.5rem;
+  }
+  .play-settings-controll img{
+    vertical-align: middle;
+    width: 3rem;
+    height: 3rem;
+    margin-right: 1rem;
+  }
+  .play-settings-controll-soundSlider{
+    display: inline-block;
+    width: 10rem;
+    vertical-align: middle;
+  }
