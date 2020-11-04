@@ -142,6 +142,7 @@ export default {
 .recommend-playlist-item img{
     width: 100%;
     height: 10rem;
+    border-radius: 0.4rem;
 }
 .recommend-playlist-item span{
     display: block;

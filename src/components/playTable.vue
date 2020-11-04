@@ -75,14 +75,14 @@
                   @click="liked(item.liked, item.id)"
                 />
               </td>
+              <!-- 歌曲名+歌曲简介 -->
               <td>{{ item.name }}&nbsp;&nbsp;{{ item.alia.join() }}</td>
               <td>
                 <span
                   class="playlist-list-singer"
                   v-for="(itemj, j) of item.ar"
                   :key="j"
-                  >{{ itemj.name }}</span
-                >
+                  >{{ itemj.name }}{{j==item.ar.length-1 ? "" : ", "}}</span>
               </td>
               <td>{{ item.al.name }}</td>
               <td></td>
@@ -300,7 +300,7 @@ export default {
     //搜索歌曲
     search() {
       this.songList = this.songList.filter((item, i) => {
-        return item.name.indexOf(this.searchVal.toLowerCase()) != -1;
+        return item.name.toLowerCase().indexOf(this.searchVal.toLowerCase()) != -1 || item.alia.join().toLowerCase().indexOf(this.searchVal.toLowerCase()) != -1;
       });
     },
     // 获取相似歌单

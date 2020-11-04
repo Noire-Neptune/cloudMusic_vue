@@ -68,6 +68,7 @@
         ref="childRouter"
         :musicId="musicId"
         :contentHeight="contentHeight"
+        :isPlay="isPlay"
         @songMsg="getplaylistSongMsg"
         @songList="getplaylistSongList"
         :fm="fm"
@@ -83,7 +84,7 @@
         <div class="play-settings">
           <div class="play-settings-title">
             <span>{{
-              msg.name ? msg.name : "从歌单里选择一首喜欢的歌曲吧~"
+              msg.name ? msg.name+"&nbsp;&nbsp;"+msg.comment : "从歌单里选择一首喜欢的歌曲吧~"
             }}</span>
           </div>
           <div class="play-settings-sliderContent">
@@ -167,7 +168,7 @@ export default {
       prevSong: {}, //存放上一首歌曲的信息
       msg: "", //存放歌曲信息
       targetSlider: 0, //slider进度条当前进度(进度条百分比值)
-      isPlay: false, //歌曲是否在播放状态
+      isPlay: false, //歌曲是否正在播放
       currentTimeStr: "", //当前播放时间(1:23形式)
       durationStr: "", //总时间(1:23形式)
       soundCurrent: 0, //声音slider进度条当前进度(进度条百分比值)
@@ -176,7 +177,7 @@ export default {
       contentHeight: 0, //子路由显示区域大小(不计算滚动条)
       userId: 0,
       showSkinMenu: false, //是否显示换肤页面
-      darkModel:false,//是否为暗黑模式,
+      darkModel:false,//是否为暗黑模式
       showDrawer:false,//小屏下是否显示左侧抽屉栏
       drawerSlideDistance:{//左侧抽屉滑动距离
         start:0,
@@ -484,7 +485,7 @@ export default {
           0
         );
       }
-      console.log("歌曲列表", songList);
+      this.g.print("歌曲列表", songList);
     },
     //获取歌单页面点击获得到的歌曲url
     getplaylistSongMsg(id, singer, zhuanji, index, similarMsg) {
@@ -735,7 +736,7 @@ export default {
   width: 100%;
   height: 4rem;
   text-align: center;
-  background: pink;
+  background-image:linear-gradient(to right, pink , #40efff);
   line-height: 4rem;
 }
 .header-showDrawerBtn{
@@ -774,7 +775,7 @@ export default {
   position: fixed;
   bottom: 0;
   height: 8rem;
-  background: pink;
+  background-image:linear-gradient(to right, pink , #40efff);
 }
 .play-setting-songImg {
   float: left;

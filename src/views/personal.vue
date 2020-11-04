@@ -31,8 +31,10 @@
     <div class="created-playlist clearfix">
       <div
         class="created-playlist-item"
+        :class="{playListShow:playListShow}"
         v-for="(item, i) of createdPlayList"
         :key="i"
+        
       >
         <router-link :to="{ name: 'playlist', query: { id: item.id } }">
           <div class="listener-num"><img src="../img/listen.png"><label>{{item.playCount}}</label></div>
@@ -48,6 +50,7 @@
     <div class="favorite-playlist clearfix">
       <div
         class="favorite-playlist-item"
+        :class="{playListShow:playListShow}"
         v-for="(item, i) of favoritePlayList"
         :key="i"
       >
@@ -69,6 +72,7 @@ export default {
       personalMsg: {},
       createdPlayList: [], //本用户创建的歌单
       favoritePlayList: [], //收藏的其他用户的歌单
+      playListShow:false,//歌单是否已经淡入出现
     };
   },
   created() {},
@@ -97,6 +101,7 @@ export default {
     },
     // 获取用户歌单
     getPlayList() {
+      this.playListShow=false;
       this.g
         .axios({
           url: "/user/playlist",
@@ -114,7 +119,13 @@ export default {
               this.createdPlayList.push(item);
             }
             return item.userId != this.userId;
-          });
+          });   
+            this.$nextTick(()=>{
+             var t= setTimeout(()=>{
+               this.playListShow=true;
+               clearTimeout(t)
+             })
+            })
         })
         .catch((err) => {
           console.log(err);
@@ -236,10 +247,19 @@ export default {
 }
 .created-playlist-item,
 .favorite-playlist-item {
+  position: relative;
+  top: 10px;
+  opacity: 0;
   float: left;
   height: 15rem;
   padding-bottom: 1rem;
   cursor: pointer;
+  transition: all 0.4s ease-in-out;
+}
+/* 淡入的过渡动画 */
+.playListShow{
+  top: 0;
+  opacity: 1;
 }
 .created-playlist-item>a,
 .favorite-playlist-item>a{
@@ -255,6 +275,7 @@ export default {
   top: 0;
   text-align: right;
   color: white;
+  border-radius: 0 0.4rem 0 0;
 }
 .listener-num>img{
   width: 1.4rem !important;
@@ -270,6 +291,7 @@ export default {
 .favorite-playlist-item img {
   width: 100%;
   height: 10rem;
+  border-radius: 0.4rem;
 }
 .created-playlist-item span,
 .favorite-playlist-item span {

@@ -36,7 +36,7 @@
         <div class="music-content-picContent-p">
           <div
             class="music-content-picContent-pic"
-            :class="{ 'music-content-picContent-picTurn': turn }"
+            :class="{ 'music-content-picContent-picTurn': isPlay }"
             :style="{ backgroundImage: 'url(' + msg.pic + ')' }"
           ></div>
         </div>
@@ -92,11 +92,10 @@
 <script>
 import commentAndSimilar from "../components/commentAndSimilar.vue";
 export default {
-  props: ["fm"], //fm标识
+  props: ["fm","isPlay"], //fm标识,歌曲是否正在播放
   data() {
     return {
       msg: {},
-      turn: false,
       lyricList: [],
       //lyricHeight: 0,
       playTime: 0, //歌曲当前播放时间
@@ -134,8 +133,6 @@ export default {
       this.msg = this.g.music.msg;
       // 歌曲id
       this.musicId = this.g.music.id;
-      // 开始旋转
-      this.turn = true;
       //获取歌词
       this.getGeci(this.musicId);
       //获取歌曲评论
@@ -521,6 +518,7 @@ export default {
         this.getFMs();
       }
     },
+   
   },
   components: {
     commentAndSimilar,
