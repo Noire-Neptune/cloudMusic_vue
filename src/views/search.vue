@@ -235,7 +235,7 @@ export default {
     //点击歌单, 跳转歌单页
     showGedan(id) {
       this.$router.push({
-        path: "/playlist",
+        path: "/playlistDetail",
         query: {
           id: id,
         },

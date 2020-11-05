@@ -26,58 +26,46 @@
     </div>
     <!-- 创建的歌单 -->
     <div class="personalMsg-content-detail-title">
-          <span class="personalMsg-content-detail-title-name">创建的歌单</span>
-        </div>
-    <div class="created-playlist clearfix">
-      <div
-        class="created-playlist-item"
-        :class="{playListShow:playListShow}"
-        v-for="(item, i) of createdPlayList"
-        :key="i"
-        
-      >
-        <router-link :to="{ name: 'playlist', query: { id: item.id } }">
-          <div class="listener-num"><img src="../img/listen.png"><label>{{item.playCount}}</label></div>
-          <img :src="item.coverImgUrl" />
-          <span>{{ item.name }}</span>
-        </router-link>
-      </div>
+      <span class="personalMsg-content-detail-title-name">创建的歌单</span>
     </div>
+    <playlists-component
+      :playLists="createdPlayList"
+      :playListShow="playListShow"
+      idKey="id"
+       playCountKey="playCount"
+       imgKey="coverImgUrl"
+       nameKey="name"
+    ></playlists-component>
     <!-- 收藏的歌单 -->
     <div class="personalMsg-content-detail-title">
-          <span class="personalMsg-content-detail-title-name">收藏的歌单</span>
-        </div>
-    <div class="favorite-playlist clearfix">
-      <div
-        class="favorite-playlist-item"
-        :class="{playListShow:playListShow}"
-        v-for="(item, i) of favoritePlayList"
-        :key="i"
-      >
-        <router-link :to="{ name: 'playlist', query: { id: item.id } }">
-          <div class="listener-num"><img src="../img/listen.png"><label>{{item.playCount}}</label></div>
-          <img :src="item.coverImgUrl" />
-          <span>{{ item.name }}</span>
-        </router-link>
-      </div>
+      <span class="personalMsg-content-detail-title-name">收藏的歌单</span>
     </div>
+    <playlists-component
+      :playLists="favoritePlayList"
+      :playListShow="playListShow"
+       idKey="id"
+       playCountKey="playCount"
+       imgKey="coverImgUrl"
+       nameKey="name"
+    ></playlists-component>
   </div>
 </template>
 
 <script>
+import playlistsComponent from "../components/playilistsComponent";
 export default {
   data() {
     return {
-      userId:0,//用户id
+      userId: 0, //用户id
       personalMsg: {},
       createdPlayList: [], //本用户创建的歌单
       favoritePlayList: [], //收藏的其他用户的歌单
-      playListShow:false,//歌单是否已经淡入出现
+      playListShow: false, //歌单是否已经淡入出现
     };
   },
   created() {},
   mounted() {
-    this.userId=this.$route.query.userId;
+    this.userId = this.$route.query.userId;
     this.getPersonalMsg();
     this.getPlayList();
   },
@@ -101,13 +89,13 @@ export default {
     },
     // 获取用户歌单
     getPlayList() {
-      this.playListShow=false;
+      this.playListShow = false;
       this.g
         .axios({
           url: "/user/playlist",
           params: {
             uid: this.userId,
-            limit:10000//一次性获取该用户所有歌单,另外, 一个用户也不可能收藏上千的歌单
+            limit: 10000, //一次性获取该用户所有歌单,另外, 一个用户也不可能收藏上千的歌单
           },
         })
         .then((res) => {
@@ -119,13 +107,13 @@ export default {
               this.createdPlayList.push(item);
             }
             return item.userId != this.userId;
-          });   
-            this.$nextTick(()=>{
-             var t= setTimeout(()=>{
-               this.playListShow=true;
-               clearTimeout(t)
-             })
-            })
+          });
+          this.$nextTick(() => {
+            var t = setTimeout(() => {
+              this.playListShow = true;
+              clearTimeout(t);
+            });
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -140,60 +128,13 @@ export default {
       }
     },
   },
+  components: {
+    playlistsComponent,
+  },
 };
 </script>
 
 <style scoped>
-@media screen and (min-width: 1921px) {
-  .created-playlist-item,
-  .favorite-playlist-item {
-    width: 12.5%;
-    padding: 0 calc(6.25% - 5rem);
-  }
-}
-@media screen and (min-width: 1601px) and (max-width: 1920px) {
-  .created-playlist-item,
-  .favorite-playlist-item {
-    width: 12.5%;
-    padding: 0 calc(6.25% - 5rem);
-  }
-}
-@media screen and (min-width: 1367px) and (max-width: 1600px) {
-  .created-playlist-item,
-  .favorite-playlist-item {
-    width: 16.666%;
-    padding: 0 calc(8.333% - 5rem);
-  }
-}
-@media screen and (min-width: 1025px) and (max-width: 1366px) {
-  .created-playlist-item,
-  .favorite-playlist-item {
-    width: 16.666%;
-    padding: 0 calc(8.333% - 5rem);
-  }
-}
-/* 平板尺寸 */
-@media screen and (min-width: 768px) and (max-width: 1023px) {
-  .created-playlist-item,
-  .favorite-playlist-item {
-    width: 25%;
-    padding: 0 calc(12.5% - 5rem);
-  }
-}
-@media screen and (min-width: 450px) and (max-width: 767px) {
-  .created-playlist-item,
-  .favorite-playlist-item {
-    width: 33.3333%;
-    padding: 0 calc(16.6665% - 5rem);
-  }
-}
-@media screen and (max-width: 449px) {
-  .created-playlist-item,
-  .favorite-playlist-item {
-    width: 50%;
-    padding: 0 calc(25% - 5rem);
-  }
-}
 .content {
   padding: 1.5rem;
   height: 100%;
@@ -240,63 +181,5 @@ export default {
 }
 .personalMsg-content-detail-data > div:not(:last-child) {
   border-right: 1px solid #e3e3e3;
-}
-.created-playlist,
-.favorite-playlist {
-  padding: 1rem 0;
-}
-.created-playlist-item,
-.favorite-playlist-item {
-  position: relative;
-  top: 10px;
-  opacity: 0;
-  float: left;
-  height: 15rem;
-  padding-bottom: 1rem;
-  cursor: pointer;
-  transition: all 0.4s ease-in-out;
-}
-/* 淡入的过渡动画 */
-.playListShow{
-  top: 0;
-  opacity: 1;
-}
-.created-playlist-item>a,
-.favorite-playlist-item>a{
-  display: block;
-  position: relative;
-}
-.listener-num{
-  position: absolute;
-  background-image: linear-gradient(to left, gray ,transparent);
-  width: 80%;
-  padding-right: 0.5rem;
-  right: 0;
-  top: 0;
-  text-align: right;
-  color: white;
-  border-radius: 0 0.4rem 0 0;
-}
-.listener-num>img{
-  width: 1.4rem !important;
-  height: 1.4rem !important;
-}
-.listener-num img,
-.listener-num label{
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.created-playlist-item img,
-.favorite-playlist-item img {
-  width: 100%;
-  height: 10rem;
-  border-radius: 0.4rem;
-}
-.created-playlist-item span,
-.favorite-playlist-item span {
-  display: block;
-  height: 4rem;
-  overflow: hidden;
 }
 </style>

@@ -52,7 +52,7 @@
       <div class="leftDrawer-btns">
         <img src="../img/friends.png" /><span>朋友</span>
       </div>
-      <router-link :to="{ path: '/playlist' }">
+      <router-link :to="{ path: '/playlistDetail' }">
         <div class="leftDrawer-btns">
           <img src="../img/dailyRecommend.png" /><span>每日推荐</span>
         </div>

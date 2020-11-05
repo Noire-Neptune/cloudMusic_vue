@@ -322,7 +322,7 @@ export default {
     },
     linkToPlayList(id) {
       this.$router.push({
-        path: "/playlist",
+        path: "/playlistDetail",
         query: {
           id: id,
         },

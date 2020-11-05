@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import Index from "./views/index.vue"
 import Play from './views/play.vue'
 import Recommend from './views/recommend.vue'
-import Playlist from './views/playlist.vue'
+import PlaylistDetail from './views/playlistDetail.vue'
 import Search from './views/search.vue'
 import SearchSuggestion from './views/searchSuggestion.vue'
 import Personal from './views/personal.vue' //个人信息
@@ -31,9 +31,9 @@ export default new VueRouter({
                 component: Play
             },
             {
-                path: '/playlist',
-                name: 'playlist',
-                component: Playlist
+                path: '/playlistDetail',
+                name: 'playlistDetail',
+                component: PlaylistDetail
             },
             {
                 path: '/search',
