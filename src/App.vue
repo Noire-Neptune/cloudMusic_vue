@@ -166,4 +166,7 @@ button,input{
 .icon-menu:before {
   content: "\e614";
 }
+.el-slider__runway{
+  margin: 0 auto !important;
+}
 </style>

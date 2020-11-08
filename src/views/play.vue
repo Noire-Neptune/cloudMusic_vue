@@ -256,6 +256,7 @@ export default {
             var first = 0;
             for (var i = 0; i <= domlist.length - 1; i++) {
               if (i == 0) {
+                //获取歌词距离歌词区域div顶部的距离
                 first = domlist[i].offsetTop;
               }
               //歌词dom元素数量和歌词数组相同
@@ -341,55 +342,6 @@ export default {
       var similarMsg = { name: name, pic: pic };
       this.$emit("songMsg", id, singer, zhuanji, index, similarMsg);
     },
-    //首页按钮
-    firstPage() {
-      this.page = 1;
-      this.getDiscuss(this.g.music.id, 0, "", this.pageSize);
-    },
-    //跳页
-    jumpPage() {
-      this.getDiscuss(
-        this.g.music.id,
-        (this.page - 1) * this.pageSize,
-        "",
-        this.pageSize
-      );
-    },
-    prevPage() {
-      if (this.page <= 1) {
-        alert("已经是第一页了");
-        return;
-      }
-      this.page--;
-      this.getDiscuss(
-        this.g.music.id,
-        (this.page - 1) * this.pageSize,
-        "",
-        this.pageSize
-      );
-    },
-    nextPage() {
-      if (this.page >= this.pageCount) {
-        alert("已经是第最后一页了");
-        return;
-      }
-      this.page++;
-      this.getDiscuss(
-        this.g.music.id,
-        (this.page - 1) * this.pageSize,
-        "",
-        this.pageSize
-      );
-    },
-    lastPage() {
-      this.page = this.pageCount;
-      this.getDiscuss(
-        this.g.music.id,
-        (this.page - 1) * this.pageSize,
-        "",
-        this.pageSize
-      );
-    },
     //点赞 评论id,是否点赞
     dianzan(commentId, liked, $event) {
       this.g
@@ -447,6 +399,19 @@ export default {
         this.mobileLyricsShow = false;
       } else {
         this.mobileLyricsShow = true;
+        this.$nextTick(()=>{
+          //显示歌词时,重新获取每个歌词里歌词区域顶部的距离,解决移动端滚动条不移动的问题
+        var domlist = this.$refs.lyric.children;
+            var first = 0;
+            for (var i = 0; i <= domlist.length - 1; i++) {
+              if (i == 0) {
+                //获取歌词距离歌词区域div顶部的距离
+                first = domlist[i].offsetTop;
+              }
+              //歌词dom元素数量和歌词数组相同
+              this.lyricList[i].offset = domlist[i].offsetTop - first;
+            }
+        })
       }
     },
     showOrHideComments() {
@@ -486,7 +451,6 @@ export default {
     playTime() {
       for (var i = 0; i <= this.lyricList.length - 1; i++) {
         //当前播放时间大于歌词开始时间且小于下一个歌词开始时间并不为最后一个歌词时, 将改歌词点亮, 如果i!=0并且i<数组长度,就上移
-
         // if (i != 0) {
         //当读取到最后一个歌词时, 后面没歌词了,让其<=自身永远成立
         if (

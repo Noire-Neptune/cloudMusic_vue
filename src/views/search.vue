@@ -23,57 +23,36 @@
       <el-tab-pane label="歌手" name="singer">
         <div class="singer-content">
           <div class="content-sum">共找到{{ artist.artistCount }}位歌手</div>
-          <div
-            class="singer-content-item"
-            v-for="(item, i) of artist.artistList"
-            :key="i"
-            :style="{
-              backgroundColor: i % 2 == 0 ? 'white' : 'rgb(224,224,224)',
-            }"
-          >
-            <img
-              :src="item.picUrl ? item.picUrl : item.img1v1Url"
-              alt="歌手图片"
-            />
-            <span>{{ item.name }}</span>
-          </div>
+          <!-- 歌手界面暂未开发 -->
+          <column-layout-component
+            :data="artist.artistList"
+            idField="id"
+            imgField="picUrl"
+            enterUrl="/"
+          ></column-layout-component>
         </div>
       </el-tab-pane>
       <el-tab-pane label="专辑" name="zhuanji">
         <div class="zhuanji-content">
           <div class="content-sum">共找到{{ albums.albumsCount }}个专辑</div>
-          <div
-            class="zhuanji-content-item"
-            v-for="(item, i) of albums.albumsList"
-            :key="i"
-            :style="{
-              backgroundColor: i % 2 == 0 ? 'white' : 'rgb(224,224,224)',
-            }"
-            @click="showAlbum(item.id)"
-          >
-            <img
-              :src="item.picUrl ? item.picUrl : item.img1v1Url"
-              alt="专辑图片"
-            />
-            <span>{{ item.name }}</span>
-          </div>
+          
+          <column-layout-component
+            :data=" albums.albumsList"
+            idField="id"
+            imgField="picUrl"
+            enterUrl="/album"
+          ></column-layout-component>
         </div>
       </el-tab-pane>
       <el-tab-pane label="歌单" name="gedan">
         <div class="gedan-content">
           <div class="content-sum">共找到{{ gedan.gedanCount }}个歌单</div>
-          <div
-            class="gedan-content-item"
-            v-for="(item, i) of gedan.gedanList"
-            :key="i"
-            :style="{
-              backgroundColor: i % 2 == 0 ? 'white' : 'rgb(224,224,224)',
-            }"
-            @click="showGedan(item.id)"
-          >
-            <img :src="item.coverImgUrl" alt="专辑图片" />
-            <span>{{ item.name }}</span>
-          </div>
+          <column-layout-component
+            :data=" albums.gedanList"
+            idField="id"
+            imgField="coverImgUrl"
+            enterUrl="/playlistDetail"
+          ></column-layout-component>
         </div>
       </el-tab-pane>
       <el-tab-pane label="视频" name="video"></el-tab-pane>
@@ -84,6 +63,7 @@
 
 <script>
 import playTable from "../components/playTable.vue";
+import columnLayoutComponent from "../components/columnLayoutComponent.vue";
 export default {
   props: ["musicId"],
   data() {
@@ -115,7 +95,6 @@ export default {
 
       switch (this.activeTab) {
         case "song": //歌曲
-          
           if (!this.songListRes.loadStatus) {
             this.$refs.loading.show();
             this.g
@@ -144,6 +123,7 @@ export default {
                 this.artist.artistList = this.artist.artistList.concat(
                   res.data.result.artists
                 );
+                console.log(this.artist.artistList)
               }
             })
             .catch((err) => {
@@ -273,6 +253,7 @@ export default {
   },
   components: {
     playTable,
+    columnLayoutComponent,
   },
 };
 </script>

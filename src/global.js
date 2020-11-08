@@ -37,7 +37,11 @@ export default {
             if (!obj.params) obj.params = {};
             obj.params.cookie = this.cookie
             axios(obj).then(res => {
-                resolve(res);
+                if (res.data.code == 200) {
+                    resolve(res);
+                } else {
+                    throw new Error(res.data)
+                }
             }).catch(err => {
                 reject(err)
             })

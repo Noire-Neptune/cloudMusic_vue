@@ -1,49 +1,56 @@
 <template>
   <div class="content">
-    <div class="recommend-banner">
+    <el-tabs v-model="activeTab" @tab-click="handleClick">
+      <el-tab-pane label="个性推荐" name="recommend">
+        <div class="recommend-banner">
       <el-carousel :interval="4000" type="card" height="18rem">
         <el-carousel-item v-for="(item, i) of bannerList" :key="i">
           <img :src="item.imageUrl" />
         </el-carousel-item>
       </el-carousel>
     </div>
-
     <!-- 推荐歌单 -->
     <div class="recommend-title">推荐歌单</div>
-    <!-- <div class="recommend-playlist clearfix">
-      <div class="recommend-playlist-item" v-for="(item,i) of rePlayList" :key="i">
-        <router-link :to="{name:'playlistDetail',query:{id:item.id}}">
-          <img :src="item.picUrl">
-        <span>{{item.name}}</span>
-        </router-link>
-      </div>
-    </div> -->
     <playlists-component
       :playLists="rePlayList"
-      :playListShow="playListShow"
+      :playListShow="playListShow.recommend"
        idKey="id"
        playCountKey="playcount"
        imgKey="picUrl"
        nameKey="name"
     ></playlists-component>
+      </el-tab-pane>
+        <el-tab-pane label="歌单" name="playlists">
+          <recommend-playLists></recommend-playLists>
+        </el-tab-pane>
+        <el-tab-pane label="电台" name="broad"></el-tab-pane>
+        <el-tab-pane label="排行榜" name="rank"></el-tab-pane>
+        <el-tab-pane label="歌手" name="singer"></el-tab-pane>
+        <el-tab-pane label="最新音乐" name="newsongs"></el-tab-pane>
+    </el-tabs>
+    
   </div>
 </template>
 
 <script>
 import playlistsComponent from "../components/playilistsComponent";
+import recommendPlayLists from "../components/recommend_playlists";
 export default {
   data() {
     return {
       bannerList: [],
       rePlayList: [], //推荐歌单
-      playListShow: false, //歌单是否已经淡入出现
+      activeTab:"recommend",//当前tab页
+      playListShow: {//歌单是否已经淡入出现
+        recommend:false,//推荐歌单
+      }, 
     };
   },
   created() {
     this.getBanner(() => {
       this.getRecommendPlayList(() => {
         var t = setTimeout(() => {
-          this.playListShow = true;
+          this.playListShow.recommend = true;
           clearTimeout(t);
         }, 0);
       });
@@ -85,9 +92,14 @@ export default {
           console.log(err);
         });
     },
+    //切换tab页触发事件
+    handleClick(){
+
+    }
   },
   components: {
     playlistsComponent,
+    recommendPlayLists
   },
 };
 </script>

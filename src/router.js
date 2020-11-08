@@ -7,8 +7,8 @@ import PlaylistDetail from './views/playlistDetail.vue'
 import Search from './views/search.vue'
 import SearchSuggestion from './views/searchSuggestion.vue'
 import Personal from './views/personal.vue' //个人信息
-import Album from './views/album.vue'
-
+import Album from './views/album.vue' //专辑页
+import Competitive from './views/competitive.vue' //精选歌单页
 Vue.use(VueRouter);
 //屏蔽路由重复的报错,对项目无影响
 const originalPush = VueRouter.prototype.push
@@ -54,6 +54,11 @@ export default new VueRouter({
                 path: '/album',
                 name: 'album',
                 component: Album
+            },
+            {
+                path: '/competitive',
+                name: 'competitive',
+                component: Competitive
             }
         ]
     }]

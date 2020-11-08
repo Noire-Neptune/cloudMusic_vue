@@ -192,7 +192,7 @@ export default {
           scrollHeight = this.scrollHeight;
         //console.log(scrollTopAndHeight,scrollHeight - 20)
         // 增加20px的缓冲区域, 只要滚动过的距离加高度>内部滚动区域总高度-20,就加载数据
-        console.log(scrollTopAndHeight , scrollHeight - 20)
+        //console.log(scrollTopAndHeight , scrollHeight - 20)
         if (scrollTopAndHeight > scrollHeight - 20 && !commentLoadStatus) {
           commentLoadStatus = true;
           that.page++;

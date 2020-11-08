@@ -312,7 +312,6 @@ export default {
           }
         }
       }
-
       this.g
         .axios({
           url: this.g.host + "/song/url",
@@ -324,7 +323,7 @@ export default {
           console.log("歌曲url", res);
           this.musicId = id;
           this.song = res.data.data[0].url;
-          this.g.getMusic(id, {
+          this.msg = {
             name: name,
             comment: comment,
             pic: pic,
@@ -333,8 +332,8 @@ export default {
             singer: singer, //歌手
             zhuanji: zhuanji, //专辑
             size: res.data.data[0].size, //歌曲大小
-          });
-          this.msg = this.g.music.msg;
+          };
+          this.g.getMusic(id, this.msg);
           //获取到歌曲url后,获取歌曲的喜欢状态
           for (var i = 0; i <= this.g.likedMusic.length - 1; i++) {
             if (this.g.likedMusic[i] == id) {
@@ -485,7 +484,7 @@ export default {
           0
         );
       }
-      this.g.print("歌曲列表", songList);
+     
     },
     //获取歌单页面点击获得到的歌曲url
     getplaylistSongMsg(id, singer, zhuanji, index, similarMsg) {
@@ -576,7 +575,7 @@ export default {
     width: calc(100% - 18rem) !important;
   }
 }
-/* 767一下屏幕,左侧菜单栏消失,改为在header栏显示 */
+/* 767一下屏幕,左侧菜单栏消失,改为在header栏显示,并且缩小歌曲进度条区域 */
 @media screen  and (max-width: 767px) {
   .leftDrawer{
     position: absolute;
@@ -608,6 +607,25 @@ export default {
   }
   .showDrawer{
     left: 0;
+  }
+  .play-tuijian{
+    padding-bottom: 6rem !important;
+  }
+  .play-setting-songImg{
+    width: 6rem  !important;
+  }
+  .play-setting{
+    height: 6rem !important;
+  }
+  .play-settings{
+    width: calc(100% - 6rem) !important;
+  }
+  .play-settings-controll img{
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+  .play-settings-controll-soundSlider{
+    width: 6rem !important;
   }
 }
 
@@ -780,21 +798,26 @@ export default {
 .play-setting-songImg {
   float: left;
   width: 8rem;
-  height: 8rem;
+  height: 100%;
   background-repeat: no-repeat;
   background-size: 100% 100%;
+}
+.play-settings{
+   width: calc(100% - 8rem);
+   height: 100%;
+  float: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 .play-settings-title,
 .play-settings-sliderContent,
 .play-settings-controll {
-  float: left;
-  width: calc(100% - 11rem);
   margin-left: 1.5rem;
   margin-right: 1.5rem;
 }
 .play-settings-sliderContent {
   position: relative;
-  height: 2.5rem;
 }
 .play-settings-sliderContent-currentTime,
 .play-settings-sliderContent-endTime,
@@ -817,7 +840,9 @@ export default {
   width: calc(100% - 7rem);
 }
 .play-settings-title {
-  height: 2rem;
+      overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .play-settings-title span {
   font-size: 1.2rem;
@@ -826,7 +851,7 @@ export default {
 }
 
 .play-settings-controll {
-  height: 3.5rem;
+
 }
 .play-settings-controll img {
   vertical-align: middle;

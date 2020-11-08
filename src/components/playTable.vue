@@ -175,7 +175,7 @@ export default {
       }
       if (trackIds.length != 0) {
         this.getSongList(trackIds, () => {
-          this.$emit("songList", this.songList);
+         this.g.print("歌曲列表", this.songList);
         });
       } else {
         this.songList = [];
@@ -237,6 +237,8 @@ export default {
           this.g.findPlayingMusic(songList, this.g.music.id);
           this.songList = this.songList.concat(songList);
           this.loadedsongList = this.loadedsongList.concat(songList);
+          //只要有一次请求完成, 不管有没有全部加载完,都将数据传到index页面,防止用户点击歌曲后主页下方播放区域看不到歌曲信息 
+            this.$emit("songList", this.songList);
           //如果ids长度和一次请求的歌曲个数相同, 则证明还有
           if(idsIndex!=ids.length-1){
             idsIndex++;
