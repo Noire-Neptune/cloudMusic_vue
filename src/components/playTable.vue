@@ -1,14 +1,22 @@
 <template>
   <div class="comp-content">
+     <preview-image-component  ref="preview"></preview-image-component>
     <div class="playlist">
       <!-- 歌单封面,介绍区域 -->
       <div class="playlist-titleContent clearfix" v-if="isGeDanShow">
+          <div class="maoboli" :style="{ backgroundImage: 'url(' + playTitle.img + ')' }"></div>
         <div
           class="playlist-titleContent-img"
           :style="{ backgroundImage: 'url(' + playTitle.img + ')' }"
+          @click="preview"
         ></div>
         <div class="playlist-titleContent-title">
           <div>{{ playTitle.name }}</div>
+          <div class="collect">
+            <img class="userImg" v-lazy="collectUser.avatarUrl" alt="用户头像" @click="enterUserDetail">
+            <span class="nickName" @click="enterUserDetail">{{collectUser.nickname}}</span>
+            <div class="collectBtn" @click="collect"><img :src="isCollect ? require('../img/like.png') : require('../img/unlike.png')"><span>收藏</span></div>
+          </div>
           <div>{{ playTitle.description }}</div>
         </div>
       </div>
@@ -103,7 +111,7 @@
             :key="i"
             @click="linkToPlayList(item.id)"
           >
-            <img :src="item.coverImgUrl" alt="歌单图片" />
+            <img v-lazy="item.coverImgUrl" alt="歌单图片" />
             <div class="similarplayListContent-item-msg">
               <div class="similarplayListContent-item-msg-title">
                 {{ item.name }}
@@ -140,6 +148,8 @@ export default {
       tabActive: 1, //当前点击的是第几个tab
       playListId: 0, //当前歌单id
       similarPlayList: [], //相似歌单列表
+      collectUser:{},//歌单收藏者信息
+      isCollect:false,//收藏状态
     };
   },
   created() {},
@@ -153,6 +163,15 @@ export default {
     getPlayDetail() {
       var res = this.songListRes;
       console.log("歌单/专辑详情", res);
+      if(this.isGeDan===true){//检查歌单是否收藏
+      this.collectUser=res.creator;
+        for(let item of this.g.userPlayListIds){
+          if(item==this.playListId){
+            this.isCollect=true;
+            break;
+          }
+        }
+      }
       //根据歌单id列表获取歌曲详情
       var trackIds = [];
       this.playTitle = {
@@ -330,10 +349,41 @@ export default {
         },
       });
     },
+    // 进入用户界面
+    enterUserDetail() {
+      this.$router.push({
+        path: "/personal",
+        query: {
+          userId: this.collectUser.userId,
+        },
+      });
+    },
     // 点击tab标签
     tab(index) {
       this.tabActive = index;
     },
+    //收藏歌单
+    collect(){
+       this.g
+        .axios({
+          url: "/playlist/subscribe",
+          params: {
+            id: this.playListId, //当前歌单id
+            t:this.isCollect==false ? 1:2,//收藏还是取消收藏
+          },
+        })
+        .then((res) => {
+          console.log("收藏成功", res);
+          this.isCollect=!this.isCollect
+          alert((this.isCollect ? "收藏": "取消收藏")+"成功")
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+    preview(){//展示封面大图
+    this.$refs.preview.show(this.playTitle.img)
+    }
   },
   watch: {
     songListRes() {
@@ -376,12 +426,26 @@ export default {
 .comp-content {
   height: 100%;
   padding-bottom: 0;
+  
 }
 
 .playlist-titleContent {
+  position: relative;
   height: 12rem;
   overflow: hidden;
   margin-bottom: 1.2rem;
+}
+/* 毛玻璃效果 */
+.maoboli{
+  position: absolute;
+    z-index: -1;
+    content: "";
+    width: 100%;
+    height: 100%;
+    filter: blur(10px);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 .playlist-titleContent-img {
   width: 12rem;
@@ -528,7 +592,35 @@ export default {
 .similarplayListContent-item-msg-creator {
   color: #0698dd;
 }
-
+.playlist-titleContent-title .collect{
+  margin-bottom: 1rem;
+}
+.playlist-titleContent-title .collect img,
+.playlist-titleContent-title .collect span,
+.playlist-titleContent-title .collect .collectBtn{
+  display: inline-block;
+  vertical-align: middle;
+}
+.playlist-titleContent-title .collect span{
+  padding-left: 1rem;
+}
+.playlist-titleContent-title .collect>.userImg{
+  width: 2rem;
+  height: 2rem;
+  border-radius: 1rem;
+}
+.playlist-titleContent-title .collect>.nickName{
+  color:#409EFF;
+}
+.playlist-titleContent-title .collect .collectBtn{
+  padding: 0.3rem 1rem;
+  border-radius: 3rem;
+  border: 1px solid red;
+}
+.playlist-titleContent-title .collect .collectBtn img{
+  width: 2rem;
+  height: 2rem;
+}
 @keyframes shandong {
   0% {
     background: transparent;

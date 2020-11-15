@@ -169,4 +169,7 @@ button,input{
 .el-slider__runway{
   margin: 0 auto !important;
 }
+img[lazy="loading"]{
+  transform: scale(0.3) !important;
+}
 </style>

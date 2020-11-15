@@ -1,4 +1,5 @@
 <template>
+<!-- 歌单列表组件 -->
   <div class="comp-content">
     <div class="playlists clearfix">
       <div
@@ -15,7 +16,7 @@
               playCountToW(item[playCountKey])
             }}</label>
           </div>
-          <img :src="item[imgKey]" />
+          <img v-lazy="item[imgKey]" />
           <span>{{ item[nameKey] }}</span>
         </router-link>
       </div>
@@ -32,6 +33,7 @@ export default {
     "imgKey", //歌单封面字段
     "nameKey", //歌单名称字段
     "playListShow", //歌单是否已经淡入出现
+    "scrollLoad",//需要绑定滚动加载时间的dom元素
   ],
   data() {
     return {};

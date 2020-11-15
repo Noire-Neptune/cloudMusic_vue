@@ -192,6 +192,7 @@ export default {
       this.g.userId=this.userId;
       this.alertShow = "none";
       this.getLikedList();
+      this.getCollectLists()
     }
   },
   mounted() {
@@ -496,11 +497,8 @@ export default {
         .axios({
           url: this.g.host + "/likelist",
           params: {
-            uid: window.localStorage.getItem("userId"),
+            uid: this.userId,
           },
-          // header:{
-          //   "Content-Type":"application/x-www-form-urlencoded"
-          // }
         })
         .then((res) => {
           console.log("获取喜欢的音乐id", res);
@@ -539,6 +537,30 @@ export default {
       if(this.drawerSlideDistance.start-this.drawerSlideDistance.end>80){
         this.showDrawer=false;
       }
+    },
+    // 存储用户收藏的歌单 参数:用户id
+    getCollectLists(){
+        this.g
+        .axios({
+          url: this.g.host + "/user/playlist",
+          params: {
+            uid: this.userId,
+            limit:10000
+          },
+          // header:{
+          //   "Content-Type":"application/x-www-form-urlencoded"
+          // }
+        })
+        .then((res) => {
+           console.log("获取用户歌单", res);
+         this.g.userPlayListIds=[]
+          for(let item of res.data.playlist){
+            this.g.userPlayListIds.push(item.id)
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   },
   watch: {
@@ -626,6 +648,9 @@ export default {
   }
   .play-settings-controll-soundSlider{
     width: 6rem !important;
+  }
+  .play-settings-title span{
+    font-size: 1rem !important;
   }
 }
 

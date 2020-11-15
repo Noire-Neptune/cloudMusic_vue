@@ -1,7 +1,9 @@
 <template>
   <div class="content">
-    <div class="personalMsg-content">
-      <img class="personalMsg-content-touxiang" :src="personalMsg.avatarUrl" />
+     <preview-image-component  ref="preview"></preview-image-component>
+    <div class="personalMsg-content" >
+      <div class="personalMsg-content-backgroundImage" :style="{backgroundImage:`url(${personalMsg.backgroundUrl})`}"></div>
+      <img class="personalMsg-content-touxiang" v-lazy="personalMsg.avatarUrl" @click="preview" />
       <div class="personalMsg-content-detail">
         <div class="personalMsg-content-detail-title">
           <span class="personalMsg-content-detail-title-name">{{
@@ -48,6 +50,7 @@
        imgKey="coverImgUrl"
        nameKey="name"
     ></playlists-component>
+   
   </div>
 </template>
 
@@ -119,6 +122,9 @@ export default {
           console.log(err);
         });
     },
+    preview(){
+      this.$refs.preview.show(this.personalMsg.avatarUrl)
+    }
   },
   watch: {
     $route(to, from) {
@@ -142,6 +148,20 @@ export default {
 }
 .personalMsg-content {
   height: 20rem;
+ position: relative;
+}
+.personalMsg-content-backgroundImage{
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-color: rgba(255,255,255,0.5);
+   background-repeat: no-repeat;
+  background-size: cover;
+  
+  background-position: center;
+
 }
 .personalMsg-content-touxiang,
 .personalMsg-content-detail {

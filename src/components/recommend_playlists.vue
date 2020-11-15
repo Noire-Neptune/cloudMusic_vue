@@ -2,7 +2,7 @@
   <div class="comp-content">
     <!-- 精品歌单,点击跳转至精品歌单页,传值:当前歌单标签 -->
     <router-link class="competitive" :to="{ path: '/competitive', query: { tag: curTag } }">
-      <img class="competitive-img" :src="firstCompetitivePlayList.coverImgUrl" alt="精品歌单">
+      <img class="competitive-img" v-lazy="firstCompetitivePlayList.coverImgUrl" alt="精品歌单">
       <div class="competitive-descCon">
         <div class="competitive-descCon-title">精品歌单</div>
         <!-- 歌单一级标题 -->
@@ -25,6 +25,7 @@
         playCountKey="playCount"
         imgKey="coverImgUrl"
         nameKey="name"
+        scrollLoad="true"
       ></playlists-component>
     </div>
   </div>
@@ -40,11 +41,12 @@ export default {
       playListShow: false,
       playlists: [], //歌单列表
       firstCompetitivePlayList:{},//第一个精品歌单
+      scrollDom:"",//需要绑定滚动加载的元素,传给歌单组件
     };
   },
   mounted() {
     this.getTags();
-    this.getFirstCompetitivePlayList()
+    this.getFirstCompetitivePlayList();
   },
   methods: {
     getTags() {

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import loadingComponent from './components/loadingComponent.vue'
+import previewImageComponent from './components/previewImageComponent.vue'
 export default {
     host: "http://49.232.0.103:3000",
     cookie: "",
@@ -14,6 +15,7 @@ export default {
         this.music.msg = msg
     },
     likedMusic: [], //喜欢的音乐
+    userPlayListIds: [], //收藏的歌单id
     music: {
         id: "",
         msg: {}
@@ -59,8 +61,12 @@ export default {
     // 全局引入loading组件
     install: function (Vue) {
         Vue.component('loadingComponent', loadingComponent);
+        Vue.component('previewImageComponent', previewImageComponent);
     },
     print: function (title, msg) {
         console.log(title, JSON.parse(JSON.stringify(msg)))
+    },
+    p(val) {
+        return JSON.parse(JSON.stringify(val))
     }
 }

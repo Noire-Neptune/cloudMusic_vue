@@ -75,7 +75,7 @@
               )
             "
           >
-            <img :src="item.album.picUrl" alt="相似音乐图片" />
+            <img :v-lazy="item.album.picUrl" alt="相似音乐图片" />
             <div class="similar-songs-item-msg">
               <div>{{ item.name }}</div>
               <div>
@@ -114,7 +114,7 @@
             <!-- 用户头像 -->
             <img
               class="commentReplied-content-comments-item-userImg"
-              :src="item.user.avatarUrl"
+              v-lazy="item.user.avatarUrl"
             />
             <div class="commentReplied-content-comments-item-userComment">
               <div>

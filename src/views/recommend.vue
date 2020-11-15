@@ -1,11 +1,11 @@
 <template>
-  <div class="content">
+  <div class="content" ref="recommendContent">
     <el-tabs v-model="activeTab" @tab-click="handleClick">
       <el-tab-pane label="个性推荐" name="recommend">
         <div class="recommend-banner">
       <el-carousel :interval="4000" type="card" height="18rem">
         <el-carousel-item v-for="(item, i) of bannerList" :key="i">
-          <img :src="item.imageUrl" />
+          <img v-lazy="item.imageUrl" />
         </el-carousel-item>
       </el-carousel>
     </div>

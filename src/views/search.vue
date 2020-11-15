@@ -48,7 +48,7 @@
         <div class="gedan-content">
           <div class="content-sum">共找到{{ gedan.gedanCount }}个歌单</div>
           <column-layout-component
-            :data=" albums.gedanList"
+            :data=" gedan.gedanList"
             idField="id"
             imgField="coverImgUrl"
             enterUrl="/playlistDetail"

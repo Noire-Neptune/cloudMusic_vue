@@ -38,7 +38,7 @@
               <span>{{ item.searchWord }}</span>
               <!-- 热度指数 -->
               <span>{{ item.score }}</span>
-              <img v-if="item.iconUrl" :src="item.iconUrl" alt="热度图片" />
+              <img v-if="item.iconUrl" v-lazy="item.iconUrl" alt="热度图片" />
             </div>
             <div class="hotSearchContent-con-item-detail-discription">
               {{ item.content }}

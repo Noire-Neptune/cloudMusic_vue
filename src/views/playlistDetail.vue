@@ -13,6 +13,7 @@
       @hideLoading="hideLoading"
     ></play-table>
     <loading-component ref="loading"></loading-component>
+    
   </div>
 </template>
 

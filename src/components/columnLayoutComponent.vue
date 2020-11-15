@@ -8,7 +8,7 @@
             @click="enter(item[idField])"
           >
             <img
-              :src="item[imgField]"
+              v-lazy="item[imgField]"
               alt="专辑图片"
             />
             <span>{{ item.name }}</span>
