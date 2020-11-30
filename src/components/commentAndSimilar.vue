@@ -15,7 +15,7 @@
             <!-- 用户头像 -->
             <img
               class="comment-content-comments-item-userImg"
-              :src="item.user.avatarUrl"
+              v-lazy="item.user.avatarUrl"
               @click="linkToUserPage(item.user.userId)"
             />
             <div class="comment-content-comments-item-userComment">
@@ -32,7 +32,7 @@
                 <div class="comment-content-comments-item-userComment-op-con">
                   <div class="zan">
                     <img
-                      :src="
+                      v-lazy="
                         item.liked
                           ? require('../img/zan.png')
                           : require('../img/unzan.png')
@@ -75,7 +75,7 @@
               )
             "
           >
-            <img :v-lazy="item.album.picUrl" alt="相似音乐图片" />
+            <img v-lazy="item.album.picUrl" alt="相似音乐图片" />
             <div class="similar-songs-item-msg">
               <div>{{ item.name }}</div>
               <div>
@@ -206,7 +206,7 @@ export default {
             }
           );
         }
-      },100);
+      }, 100);
     });
   },
   methods: {

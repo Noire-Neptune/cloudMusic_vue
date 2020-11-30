@@ -79,7 +79,7 @@
       </div>
       <comment-and-similar
         class="commentComp"
-        :class="{onlySimilarShow:mobileSimShow}"
+        :class="{ onlySimilarShow: mobileSimShow }"
         :id="musicId"
         :enableComment="true"
         type="0"
@@ -92,7 +92,7 @@
 <script>
 import commentAndSimilar from "../components/commentAndSimilar.vue";
 export default {
-  props: ["fm","isPlay"], //fm标识,歌曲是否正在播放
+  props: ["fm", "isPlay"], //fm标识,歌曲是否正在播放
   data() {
     return {
       msg: {},
@@ -399,36 +399,36 @@ export default {
         this.mobileLyricsShow = false;
       } else {
         this.mobileLyricsShow = true;
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           //显示歌词时,重新获取每个歌词里歌词区域顶部的距离,解决移动端滚动条不移动的问题
-        var domlist = this.$refs.lyric.children;
-            var first = 0;
-            for (var i = 0; i <= domlist.length - 1; i++) {
-              if (i == 0) {
-                //获取歌词距离歌词区域div顶部的距离
-                first = domlist[i].offsetTop;
-              }
-              //歌词dom元素数量和歌词数组相同
-              this.lyricList[i].offset = domlist[i].offsetTop - first;
+          var domlist = this.$refs.lyric.children;
+          var first = 0;
+          for (var i = 0; i <= domlist.length - 1; i++) {
+            if (i == 0) {
+              //获取歌词距离歌词区域div顶部的距离
+              first = domlist[i].offsetTop;
             }
-        })
+            //歌词dom元素数量和歌词数组相同
+            this.lyricList[i].offset = domlist[i].offsetTop - first;
+          }
+        });
       }
     },
     showOrHideComments() {
       if (this.mobileCommentsShow) {
         this.mobileCommentsShow = false;
-        var t=setTimeout(()=>{//动画结束后再显示评论区域
-          this.mobileSimShow=false;
-          clearTimeout(t)
-        },300)
+        var t = setTimeout(() => {
+          //动画结束后再显示评论区域
+          this.mobileSimShow = false;
+          clearTimeout(t);
+        }, 300);
       } else {
         this.mobileCommentsShow = true;
       }
     },
-    showSim(){
-      
-        this.mobileCommentsShow = true;
-        this.mobileSimShow=true;
+    showSim() {
+      this.mobileCommentsShow = true;
+      this.mobileSimShow = true;
     },
     //时间戳返回年月日
     timeToStr(time) {
@@ -482,7 +482,6 @@ export default {
         this.getFMs();
       }
     },
-   
   },
   components: {
     commentAndSimilar,
@@ -678,9 +677,7 @@ export default {
   overflow: auto;
 }
 /* 评论区域 */
-.commentCon{
-  height: calc(100% - 40rem);
-}
+
 .comment-content {
   float: left;
   width: 70%;
@@ -832,16 +829,16 @@ export default {
 </style>
 <style>
 @media screen and (max-width: 767px) {
-  .similar-content{
+  .similar-content {
     display: none;
   }
-  .comment-content{
+  .comment-content {
     width: 100% !important;
   }
   .onlySimilarShow .comment-content {
     display: none;
   }
-  .onlySimilarShow .similar-content{
+  .onlySimilarShow .similar-content {
     width: 100%;
     display: block;
   }
