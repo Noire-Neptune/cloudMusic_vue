@@ -37,12 +37,12 @@ export default {
         }
         return new Promise((resolve, reject) => {
             if (!obj.params) obj.params = {};
-            obj.params.cookie = this.cookie
+            if (!obj.noCookie) obj.params.cookie = this.cookie
             axios(obj).then(res => {
                 if (res.data.code == 200) {
                     resolve(res);
                 } else {
-                    throw new Error(res.data)
+                    reject(res)
                 }
             }).catch(err => {
                 reject(err)

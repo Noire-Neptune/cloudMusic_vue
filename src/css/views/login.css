@@ -1,0 +1,165 @@
+.header {
+    height: 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0 1rem;
+}
+
+.links>div {
+    float: left;
+    padding: 0 1rem;
+    height: 100%;
+}
+
+.swiper {
+    position: relative;
+    height: 40rem;
+    display: flex;
+    overflow: hidden;
+}
+
+.swiper-one,
+.swiper-two {
+    width: auto;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    display: flex;
+
+}
+
+.swiper-one {
+    left: 0;
+    animation: zoumadeng1 40s linear infinite;
+}
+
+.swiper-two {
+    left: calc(25rem * 20);
+    animation: zoumadeng2 40s linear infinite;
+}
+
+.swiper .swiper-img {
+    width: 25rem;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50%;
+}
+
+.mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.login-content {
+    position: absolute;
+    top: 50%;
+    left: calc(100% - 50rem);
+    width: 35rem;
+    height: 35rem;
+    transform: translateY(-50%);
+    background-color: rgba(115, 201, 229, 0.8);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.login-content>p {
+    text-align: center;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    line-height: 3rem;
+    margin: 3rem 0;
+}
+
+.phone {
+    display: block;
+    width: 90%;
+    margin: auto;
+    height: 3rem;
+    padding: 0 0.5rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 2rem;
+}
+
+.pwdcon {
+    position: relative;
+    width: 90%;
+    margin: auto;
+    height: 3rem;
+    margin: 2rem;
+}
+
+.pwd {
+    width: 100%;
+    padding: 0 0.5rem;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.yzm {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.current {
+    font-size: 1.2rem;
+    line-height: 3rem;
+    border: 0;
+    border-radius: 3rem;
+    display: block;
+    width: 90%;
+    margin: auto;
+    background-color: #42B983;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.qiehuan {
+    width: 90%;
+    margin: auto;
+    text-align: right;
+}
+
+.qiehuan span {
+    cursor: pointer;
+}
+
+@keyframes zoumadeng1 {
+    0% {
+        left: 0;
+    }
+
+    50% {
+        left: calc(-25rem * 20);
+    }
+
+    81.75% {
+        left: calc(25rem * 7.3);
+    }
+
+    100% {
+        left: 0;
+    }
+}
+
+@keyframes zoumadeng2 {
+    0% {
+        left: calc(25rem * 20);
+    }
+
+    100% {
+        left: calc(-25rem * 20);
+    }
+}

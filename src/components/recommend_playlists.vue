@@ -1,21 +1,36 @@
 <template>
   <div class="comp-content">
     <!-- 精品歌单,点击跳转至精品歌单页,传值:当前歌单标签 -->
-    <router-link class="competitive" :to="{ path: '/competitive', query: { tag: curTag } }">
-      <img class="competitive-img" v-lazy="firstCompetitivePlayList.coverImgUrl" alt="精品歌单">
+    <router-link
+      class="competitive"
+      :to="{ path: '/competitive', query: { tag: curTag } }"
+    >
+      <img
+        class="competitive-img"
+        v-lazy="firstCompetitivePlayList.coverImgUrl"
+        alt="精品歌单"
+      />
       <div class="competitive-descCon">
         <div class="competitive-descCon-title">精品歌单</div>
         <!-- 歌单一级标题 -->
-        <div class="competitive-descCon-desc">{{firstCompetitivePlayList.name}}</div>
+        <div class="competitive-descCon-desc">
+          {{ firstCompetitivePlayList.name }}
+        </div>
         <!-- 歌单二级标题 -->
-         <div class="competitive-descCon-desc2">{{firstCompetitivePlayList.copywriter}}</div>
+        <div class="competitive-descCon-desc2">
+          {{ firstCompetitivePlayList.copywriter }}
+        </div>
       </div>
     </router-link>
     <!-- 歌单标签 -->
     <div class="playlists-tags">
-      <span v-for="(item, i) of tags" :key="i" :class="{'playlists-tags-span-active':item.name==curTag}" @click="changeTag(item.name)">{{
-        item.name
-      }}</span>
+      <span
+        v-for="(item, i) of tags"
+        :key="i"
+        :class="{ 'playlists-tags-span-active': item.name == curTag }"
+        @click="changeTag(item.name)"
+        >{{ item.name }}</span
+      >
     </div>
     <div class="playlists">
       <playlists-component
@@ -40,8 +55,8 @@ export default {
       curTag: "",
       playListShow: false,
       playlists: [], //歌单列表
-      firstCompetitivePlayList:{},//第一个精品歌单
-      scrollDom:"",//需要绑定滚动加载的元素,传给歌单组件
+      firstCompetitivePlayList: {}, //第一个精品歌单
+      scrollDom: "", //需要绑定滚动加载的元素,传给歌单组件
     };
   },
   mounted() {
@@ -58,7 +73,7 @@ export default {
         .then((res) => {
           this.g.print("热门歌单标签", res);
           this.tags = res.data.tags;
-          this.curTag=this.tags[0].name;//默认选中第一个歌单
+          this.curTag = this.tags[0].name; //默认选中第一个歌单
         })
         .catch((err) => {
           console.log(err);
@@ -83,25 +98,24 @@ export default {
           this.g.print("热门歌单", res);
           this.playlists = res.data.playlists;
           this.playListShow = true;
-
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    // 获取第一个精品歌单
+    // 获取第一个精品歌单,作为发现页的歌单tab页的头部
     getFirstCompetitivePlayList() {
       this.g
         .axios({
           url: "/top/playlist/highquality",
           params: {
             cat: this.curTag,
-            limit:1
+            limit: 1,
           },
         })
         .then((res) => {
           this.g.print("第一个精品歌单", res);
-         this.firstCompetitivePlayList=res.data.playlists[0]
+          this.firstCompetitivePlayList = res.data.playlists[0];
         })
         .catch((err) => {
           console.log(err);
@@ -111,7 +125,7 @@ export default {
   watch: {
     curTag() {
       this.getPlayLists();
-      this.getFirstCompetitivePlayList()
+      this.getFirstCompetitivePlayList();
     },
   },
   components: {
@@ -128,25 +142,26 @@ export default {
   padding: 1rem;
   border-radius: 1rem;
 }
-.competitive-img{
+.competitive-img {
   width: 13rem;
   height: 100%;
 }
-.competitive-img,.competitive-descCon{
-display: inline-block;
-vertical-align: middle;
+.competitive-img,
+.competitive-descCon {
+  display: inline-block;
+  vertical-align: middle;
 }
-.competitive-descCon{
+.competitive-descCon {
   width: calc(100% - 13rem);
   padding-left: 1rem;
 }
-.competitive-descCon-title{
+.competitive-descCon-title {
   display: inline-block;
   padding: 0.5rem 1rem;
   border: 1px solid gold;
   border-radius: 5rem;
 }
-.competitive-descCon-desc{
+.competitive-descCon-desc {
   font-size: 1.5rem;
   padding: 1rem 0 0.5rem;
 }
@@ -154,14 +169,14 @@ vertical-align: middle;
   padding: 0 1rem;
   text-align: right;
 }
-.playlists-tags span{
-    margin: 0 0.5rem;
-    cursor: pointer;
-    padding: 0.3rem 1.2rem;
-    border-radius: 1rem;
+.playlists-tags span {
+  margin: 0 0.5rem;
+  cursor: pointer;
+  padding: 0.3rem 1.2rem;
+  border-radius: 1rem;
 }
-.playlists-tags-span-active{
+.playlists-tags-span-active {
   color: white;
-  background-color: #409EFF;
+  background-color: #409eff;
 }
 </style>

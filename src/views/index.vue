@@ -1,5 +1,5 @@
 <template>
-  <div class="clearfix" style="height:100%">
+  <div class="clearfix" style="height: 100%">
     <div class="header clearfix" ref="header">
       <div class="header-logo">云音乐</div>
       <div class="header-showDrawerBtn icon-menu" @click="drawerShow"></div>
@@ -23,41 +23,14 @@
       </div>
     </div>
     <!-- 换肤菜单 -->
-      <div
-        class="changeSkinMenu"
-        :style="{ display: showSkinMenu ? 'flex' : 'none' }"
-      >
-        <el-switch
-          v-model="darkModel"
-          active-text="暗黑模式"
-        >
-        </el-switch>
-      </div>
-    <div class="leftDrawer" :class="{showDrawer:showDrawer}" :style="{ height: drawerHeight + 'px' }" @mousedown="slideStart" @mouseup="slideEnd">
-      <audio :src="song" autoplay ref="audio"></audio>
-      <div class="leftDrawer-title"><span>推荐</span></div>
-      <router-link to="/">
-        <div class="leftDrawer-btns">
-          <img src="../img/music.png" /><span>发现音乐</span>
-        </div>
-      </router-link>
-      <router-link :to="{ path: '/play', query: { fm: 1 } }">
-        <div class="leftDrawer-btns">
-          <img src="../img/FM.png" /><span>私人FM</span>
-        </div>
-      </router-link>
-      <div class="leftDrawer-btns">
-        <img src="../img/video.png" /><span>视频</span>
-      </div>
-      <div class="leftDrawer-btns">
-        <img src="../img/friends.png" /><span>朋友</span>
-      </div>
-      <router-link :to="{ path: '/playlistDetail' }">
-        <div class="leftDrawer-btns">
-          <img src="../img/dailyRecommend.png" /><span>每日推荐</span>
-        </div>
-      </router-link>
+    <div
+      class="changeSkinMenu"
+      :style="{ display: showSkinMenu ? 'flex' : 'none' }"
+    >
+      <el-switch v-model="darkModel" active-text="暗黑模式"> </el-switch>
     </div>
+    <audio :src="song" autoplay ref="audio"></audio>
+    <left-navigation class="leftDrawer"  @songMsg="getplaylistSongMsg" @songList="getplaylistSongList"></left-navigation>
     <div
       class="play-tuijian"
       :style="{ height: drawerHeight + 'px' }"
@@ -76,15 +49,14 @@
       <!-- 播放设置区域 -->
       <div class="play-setting clearfix" ref="playSetting">
         <router-link to="/play">
-          <div
-            class="play-setting-songImg"
-            :style="{ backgroundImage: 'url(' + msg.pic + ')' }"
-          ></div>
+          <img class="play-setting-songImg" v-lazy="msg.pic" />
         </router-link>
         <div class="play-settings">
           <div class="play-settings-title">
             <span>{{
-              msg.name ? msg.name+"&nbsp;&nbsp;"+msg.comment : "从歌单里选择一首喜欢的歌曲吧~"
+              msg.name
+                ? msg.name + "&nbsp;&nbsp;" + msg.comment
+                : "从歌单里选择一首喜欢的歌曲吧~"
             }}</span>
           </div>
           <div class="play-settings-sliderContent">
@@ -131,7 +103,7 @@
     </div>
 
     <!-- 登录弹窗 -->
-    <div class="login-alert" :style="{ display: alertShow }">
+    <!-- <div class="login-alert" :style="{ display: alertShow }">
       <div class="login-alert-title">请登录</div>
       <div class="login-alert-form">
         <input
@@ -145,17 +117,15 @@
         <button @click="login">确定</button>
         <button>取消</button>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
+import leftNavigation from "../components/leftNavigation";
 export default {
   data() {
     return {
-      phone: "",
-      pwd: "",
-      alertShow: "block",
       playShow: false, //歌单详情弹窗
       playTitle: {}, //歌单头部
       songList: [], //歌曲列表(由歌单页传来或者由播放界面(play)的fm传来)
@@ -177,22 +147,25 @@ export default {
       contentHeight: 0, //子路由显示区域大小(不计算滚动条)
       userId: 0,
       showSkinMenu: false, //是否显示换肤页面
-      darkModel:false,//是否为暗黑模式
-      showDrawer:false,//小屏下是否显示左侧抽屉栏
-      drawerSlideDistance:{//左侧抽屉滑动距离
-        start:0,
-        end:0
-      }
+      darkModel: false, //是否为暗黑模式
+      showDrawer: false, //小屏下是否显示左侧抽屉栏
+      drawerSlideDistance: {
+        //左侧抽屉滑动距离
+        start: 0,
+        end: 0,
+      },
     };
   },
   created() {
     this.userId = window.localStorage.getItem("userId");
     this.g.cookie = window.localStorage.getItem("cookie");
     if (this.g.cookie && this.userId) {
-      this.g.userId=this.userId;
-      this.alertShow = "none";
+      this.g.userId = this.userId;
       this.getLikedList();
-      this.getCollectLists()
+    } else {
+      this.$router.push({
+        path: "/login",
+      });
     }
   },
   mounted() {
@@ -255,43 +228,43 @@ export default {
   },
   methods: {
     //登录
-    login() {
-      this.g
-        .axios({
-          method: "GET",
-          url: this.g.host + "/login/cellphone",
-          params: {
-            phone: this.phone,
-            password: this.pwd,
-          },
-        })
-        .then((res) => {
-          console.log(res);
-          if (res.status == 200) {
-            this.alertShow = "none";
-            //设置多个cookie值(由于网抑云的cookie始终设置无效,目前只能采用)
-            var cookie = res.data.cookie;
-            // cookie = cookie.split(" Path=/;");
-            // cookie.forEach((item, i) => {
-            //   if (item) {
-            //     document.cookie = item + " Path=/;";
-            //   }
-            // });
+    // login() {
+    //   this.g
+    //     .axios({
+    //       method: "GET",
+    //       url: this.g.host + "/login/cellphone",
+    //       params: {
+    //         phone: this.phone,
+    //         password: this.pwd,
+    //       },
+    //     })
+    //     .then((res) => {
+    //       console.log(res);
+    //       if (res.status == 200) {
+    //         this.alertShow = "none";
+    //         //设置多个cookie值(由于网抑云的cookie始终设置无效,目前只能采用)
+    //         var cookie = res.data.cookie;
+    //         // cookie = cookie.split(" Path=/;");
+    //         // cookie.forEach((item, i) => {
+    //         //   if (item) {
+    //         //     document.cookie = item + " Path=/;";
+    //         //   }
+    //         // });
 
-            //document.cookie = "domain=" + document.domain;
-            this.g.cookie = res.data.cookie;
-            window.localStorage.setItem("cookie", cookie);
-            this.g.userId=res.data.profile.userId;
-            this.userId=this.g.userId
-            console.log(this.g.userId);
-            window.localStorage.setItem("userId", this.g.userId);
-            this.getLikedList();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+    //         //document.cookie = "domain=" + document.domain;
+    //         this.g.cookie = res.data.cookie;
+    //         window.localStorage.setItem("cookie", cookie);
+    //         this.g.userId = res.data.profile.userId;
+    //         this.userId = this.g.userId;
+    //         console.log(this.g.userId);
+    //         window.localStorage.setItem("userId", this.g.userId);
+    //         this.getLikedList();
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
 
     //获取歌曲url,similarMsg为相似歌曲表示,其 comment为歌曲注释,name为歌名,在请求返回值的alias取到(只有相似歌曲才会用到)
     getSongUrl(id, singer, zhuanji, index, similarMsg) {
@@ -321,7 +294,7 @@ export default {
           },
         })
         .then((res) => {
-          console.log("歌曲url", res);
+          console.log("歌曲url", { ...res });
           this.musicId = id;
           this.song = res.data.data[0].url;
           this.msg = {
@@ -485,7 +458,6 @@ export default {
           0
         );
       }
-     
     },
     //获取歌单页面点击获得到的歌曲url
     getplaylistSongMsg(id, singer, zhuanji, index, similarMsg) {
@@ -511,424 +483,30 @@ export default {
     //换肤
     changeSkin(e) {
       e.stopPropagation();
-      if(this.showSkinMenu){
+      if (this.showSkinMenu) {
         this.showSkinMenu = false;
-      }else{
+      } else {
         this.showSkinMenu = true;
       }
-      
     },
     //小屏下左侧抽屉显示
-    drawerShow(){
-      if(this.showDrawer){
-        this.showDrawer=false
-      }else{
-        this.showDrawer=true
+    drawerShow() {
+      if (this.showDrawer) {
+        this.showDrawer = false;
+      } else {
+        this.showDrawer = true;
       }
     },
-    // 抽屉滑动开始事件,获取鼠标点下的x坐标
-    slideStart(e){
-      e.stopPropagation()
-      this.drawerSlideDistance.start=e.clientX
-    },
-    slideEnd(e){
-       e.stopPropagation()
-      this.drawerSlideDistance.end=e.clientX;
-      if(this.drawerSlideDistance.start-this.drawerSlideDistance.end>80){
-        this.showDrawer=false;
-      }
-    },
-    // 存储用户收藏的歌单 参数:用户id
-    getCollectLists(){
-        this.g
-        .axios({
-          url: this.g.host + "/user/playlist",
-          params: {
-            uid: this.userId,
-            limit:10000
-          },
-          // header:{
-          //   "Content-Type":"application/x-www-form-urlencoded"
-          // }
-        })
-        .then((res) => {
-           console.log("获取用户歌单", res);
-         this.g.userPlayListIds=[]
-          for(let item of res.data.playlist){
-            this.g.userPlayListIds.push(item.id)
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
   },
   watch: {
-    darkModel(){
-      this.$emit('getDarkModel',this.darkModel)
-    }
+    darkModel() {
+      this.$emit("getDarkModel", this.darkModel);
+    },
+  },
+  components: {
+    leftNavigation,
   },
 };
 </script>
 
-<style scoped>
-@media screen and (min-width: 1367px) {
-  .leftDrawer {
-    width: 25rem !important;
-  }
-  .play-tuijian {
-    width: calc(100% - 25rem) !important;
-  }
-}
-@media screen and (min-width: 1025px) and (max-width: 1366px) {
-  .leftDrawer{
-    width: 20rem !important;
-  }
-  .play-tuijian {
-    width: calc(100% - 20rem) !important;
-  }
-}
-/* 平板尺寸 */
-@media screen and (min-width: 768px) and (max-width: 1024px) {
-  .leftDrawer{
-    width: 18rem !important;
-  }
-  .play-tuijian {
-    width: calc(100% - 18rem) !important;
-  }
-}
-/* 767一下屏幕,左侧菜单栏消失,改为在header栏显示,并且缩小歌曲进度条区域 */
-@media screen  and (max-width: 767px) {
-  .leftDrawer{
-    position: absolute;
-    width: 80% !important;
-    left: -80%;
-    transition: left 0.3s ease-in-out;
-    z-index: 10;
-  }
-  .play-tuijian {
-   width:100% !important;
-   height: calc(100% - 4rem) !important;
-  }
-  .header{
-    display: flex;
-    justify-content: space-between;
-  }
-  .header-menu{
-    float: none !important;
-    display: inline-block;
-  }
-  .header.clearfix:after{
-    display: none !important;
-  }
-  .header-logo{
-    display: none !important;
-  }
-  .header-showDrawerBtn{
-    display: block !important;
-  }
-  .showDrawer{
-    left: 0;
-  }
-  .play-tuijian{
-    padding-bottom: 6rem !important;
-  }
-  .play-setting-songImg{
-    width: 6rem  !important;
-  }
-  .play-setting{
-    height: 6rem !important;
-  }
-  .play-settings{
-    width: calc(100% - 6rem) !important;
-  }
-  .play-settings-controll img{
-    width: 2rem !important;
-    height: 2rem !important;
-  }
-  .play-settings-controll-soundSlider{
-    width: 6rem !important;
-  }
-  .play-settings-title span{
-    font-size: 1rem !important;
-  }
-}
-
-.login-alert {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 40rem;
-  height: 40rem;
-  z-index: 100;
-  background: rgb(209, 205, 205);
-  transform: translate(-50%, -50%);
-  border-radius: 20px;
-}
-.login-alert-title {
-  margin-top: 1.5rem;
-  text-align: center;
-  font-size: 2.2rem;
-}
-.login-alert-form {
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.login-alert-form input {
-  display: block;
-  width: 80%;
-  margin: 1.3rem auto;
-  height: 2.5rem;
-  padding: 0 10px;
-  border: 0;
-  border-radius: 3px;
-}
-.login-alert-btn {
-  width: 100%;
-  position: absolute;
-  bottom: 10%;
-  text-align: center;
-}
-.login-alert-btn button {
-  width: 8rem;
-  height: 2.5rem;
-  font-size: 1.1rem;
-  border-radius: 20px;
-  border: 0;
-  cursor: pointer;
-}
-.login-alert-btn button:first-child {
-  margin-right: 3rem;
-  background: #20a0ff;
-  color: white;
-}
-.play-tuijian {
-  position: relative;
-}
-.play-tuijian,
-.play-setting {
-  width: calc(100% - 35rem);
-}
-
-.play-alert {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 50rem;
-  height: 50rem;
-  padding: 1rem;
-  background: rgb(224, 224, 224, 0.8);
-  border-radius: 20px;
-}
-.play-alert-cancel {
-  position: absolute;
-  top: 0.8rem;
-  right: 0.8rem;
-  cursor: pointer;
-}
-.play-alert-titleContent {
-  height: 8rem;
-  overflow: hidden;
-  margin-bottom: 1.2rem;
-}
-.play-alert-titleContent-img {
-  width: 8rem;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-position: 50%;
-}
-.play-alert-titleContent-title {
-  width: calc(100% - 8rem);
-  height: 100%;
-  padding-left: 1rem;
-}
-.play-alert-titleContent-title:first-child {
-  margin-bottom: 20px;
-}
-.play-alert-titleContent-img,
-.play-alert-titleContent-title {
-  float: left;
-}
-.play-alert-list {
-  height: calc(100% - 8rem);
-  overflow: auto;
-}
-.play-alert-list table {
-  width: 100%;
-  overflow: auto;
-  border-collapse: collapse;
-}
-.play-alert-list table td {
-  height: 2rem;
-  border: 1px solid gray;
-  padding: 0 5px;
-}
-/* 左侧可伸缩的抽屉 */
-.leftDrawer,
-.play-tuijian {
-  float: left;
-  overflow: hidden;
-}
-/* 页面头部区域 */
-.header {
-  width: 100%;
-  height: 4rem;
-  text-align: center;
-  background-image:linear-gradient(to right, pink , #40efff);
-  line-height: 4rem;
-}
-.header-showDrawerBtn{
-  display: none ;
-  font-size: 1.5rem;
-  padding-right: 2rem;
-}
-.header-logo,
-.header-showDrawerBtn {
-  float: left;
-  padding-left: 2rem;
-}
-.header-menu {
-  float: right;
-}
-.header-menu > a {
-  float: left;
-  padding: 0 1rem;
-  cursor: pointer;
-}
-.header-menu-search img {
-  width: 1.4rem;
-  height: 1.4rem;
-  vertical-align: middle;
-}
-.play-tuijian {
-  padding-bottom: 8rem;
-}
-.leftDrawer {
-  background: rgb(224, 224, 224);
-}
-.play-alert-list-singer:not(:last-child):after {
-  content: ", ";
-}
-.play-setting {
-  position: fixed;
-  bottom: 0;
-  height: 8rem;
-  background-image:linear-gradient(to right, pink , #40efff);
-}
-.play-setting-songImg {
-  float: left;
-  width: 8rem;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-}
-.play-settings{
-   width: calc(100% - 8rem);
-   height: 100%;
-  float: left;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-.play-settings-title,
-.play-settings-sliderContent,
-.play-settings-controll {
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-}
-.play-settings-sliderContent {
-  position: relative;
-}
-.play-settings-sliderContent-currentTime,
-.play-settings-sliderContent-endTime,
-.play-settings-sliderContent-slider {
-  display: inline-block;
-  vertical-align: middle;
-}
-.play-settings-sliderContent-currentTime,
-.play-settings-sliderContent-endTime {
-  width: 3.5rem;
-}
-.play-settings-sliderContent-currentTime {
-  padding-right: 0.5rem;
-  text-align: right;
-}
-.play-settings-sliderContent-endTime {
-  padding-left: 0.5rem;
-}
-.play-settings-sliderContent-slider {
-  width: calc(100% - 7rem);
-}
-.play-settings-title {
-      overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.play-settings-title span {
-  font-size: 1.2rem;
-  line-height: 2rem;
-  vertical-align: middle;
-}
-
-.play-settings-controll {
-
-}
-.play-settings-controll img {
-  vertical-align: middle;
-  width: 3rem;
-  height: 3rem;
-  margin-right: 1rem;
-}
-.play-settings-controll .isLike {
-  margin-left: 1rem;
-}
-.play-settings-controll-soundSlider {
-  display: inline-block;
-  width: 10rem;
-  vertical-align: middle;
-}
-.play-settings-sliderContent .el-slider__button-wrapper {
-  transition: left 0.5s linear;
-}
-.leftDrawer-title {
-  padding: 1rem 2rem;
-}
-.leftDrawer-btns {
-  height: 5rem;
-  padding: 0 0.5rem;
-  cursor: pointer;
-}
-.leftDrawer-btns span,
-.leftDrawer-btns img {
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 5rem;
-}
-.leftDrawer-btns img {
-  width: 1.4rem;
-  height: 1.4rem;
-  margin-right: 0.5rem;
-}
-.search-content {
-  cursor: default;
-}
-/* 换肤菜单 */
-.changeSkinMenu {
-  position: absolute;
-  right: 1.5rem;
-  top: 4rem;
-  background: #efefef;
-  width: 15rem;
-  height: 5rem;
-  border-radius: 5px;
-  z-index: 10000;
-  justify-content: space-around;
-  align-items: center;
-}
-
-</style>
+<style  scoped src='../css/views/index.css'></style>

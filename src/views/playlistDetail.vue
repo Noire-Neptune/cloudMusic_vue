@@ -1,9 +1,6 @@
 <template>
-  <div
-    class="content"
-   
-  >
-  <!--  :style="{height: (loading ? `${contentHeight}px` : `auto`),overflow: loading ? `hidden` : `auto`}" -->
+  <div class="content">
+    <!--  :style="{height: (loading ? `${contentHeight}px` : `auto`),overflow: loading ? `hidden` : `auto`}" -->
     <play-table
       :musicId="musicId"
       :songListRes="songListRes"
@@ -13,7 +10,6 @@
       @hideLoading="hideLoading"
     ></play-table>
     <loading-component ref="loading"></loading-component>
-    
   </div>
 </template>
 
@@ -31,39 +27,41 @@ export default {
   created() {},
   mounted() {
     //如果传来歌单id则表示是搜索歌单,否则就是每日推荐
-        if (this.$route.query.id) {
-          this.getPlayRes();
-        } else {
-          this.getDailyRecommend();
-        }
+    if (this.$route.query.id) {
+      this.getPlayRes();
+    } else {
+      this.getDailyRecommend();
+    }
   },
   methods: {
     //获取歌单歌曲详情(即歌曲的id集合)
     getPlayRes() {
       this.playListId = this.$route.query.id;
       this.$refs.loading.show();
-      this.g.axios({
-        url: this.g.host + "/playlist/detail",
-        params: {
-          id: this.playListId,
-        },
-      })
+      this.g
+        .axios({
+          url: this.g.host + "/playlist/detail",
+          params: {
+            id: this.playListId,
+          },
+        })
         .then((res) => {
           console.log("歌单页", res);
           this.isGeDan = true;
           this.songListRes = res.data.playlist;
         })
         .catch((err) => {
-           this.$refs.loading.hide();
+          this.$refs.loading.hide();
           console.log(err);
         });
     },
     //获取每日推荐详情
     getDailyRecommend() {
       this.$refs.loading.show();
-      this.g.axios({
-        url: this.g.host + "/recommend/songs",
-      })
+      this.g
+        .axios({
+          url: this.g.host + "/recommend/songs",
+        })
         .then((res) => {
           console.log("获取每日推荐歌曲", res);
           this.isGeDan = false;
@@ -81,7 +79,7 @@ export default {
     songList(songList) {
       this.$emit("songList", songList);
     },
-     hideLoading(){
+    hideLoading() {
       this.$refs.loading.hide();
     },
   },
@@ -104,10 +102,5 @@ export default {
 };
 </script>
 
-<style scoped>
-.content {
-  padding: 1.5rem;
-  height: 100% !important;
-  overflow: auto;
-}
+<style src='../css/views/playlistDetail.css' scoped>
 </style>

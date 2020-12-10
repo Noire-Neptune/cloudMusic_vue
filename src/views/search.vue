@@ -35,9 +35,9 @@
       <el-tab-pane label="专辑" name="zhuanji">
         <div class="zhuanji-content">
           <div class="content-sum">共找到{{ albums.albumsCount }}个专辑</div>
-          
+
           <column-layout-component
-            :data=" albums.albumsList"
+            :data="albums.albumsList"
             idField="id"
             imgField="picUrl"
             enterUrl="/album"
@@ -48,7 +48,7 @@
         <div class="gedan-content">
           <div class="content-sum">共找到{{ gedan.gedanCount }}个歌单</div>
           <column-layout-component
-            :data=" gedan.gedanList"
+            :data="gedan.gedanList"
             idField="id"
             imgField="coverImgUrl"
             enterUrl="/playlistDetail"
@@ -123,7 +123,7 @@ export default {
                 this.artist.artistList = this.artist.artistList.concat(
                   res.data.result.artists
                 );
-                console.log(this.artist.artistList)
+                console.log(this.artist.artistList);
               }
             })
             .catch((err) => {
@@ -258,67 +258,5 @@ export default {
 };
 </script>
 
-<style scoped>
-.content {
-  padding: 1.5rem;
-  height: 100%;
-  overflow: auto;
-}
-/* 搜索区域 */
-.searchInputContent {
-  padding-bottom: 1rem;
-  text-align: center;
-}
-.searchInputContent input {
-  width: calc(100% - 2.3rem);
-  height: 2.3rem;
-  border-radius: 2rem 0 0 2rem;
-  border: 1px solid #e3e3e3;
-  border-right: 0;
-  padding: 3px 5px;
-  vertical-align: middle;
-}
-.searchInputContent button {
-  width: 2.3rem;
-  border-radius: 0 2rem 2rem 0;
-  height: 2.3rem;
-  border: 1px solid #e3e3e3;
-  border-left: 0;
-  background-color: white;
-  background-image: url("../img/search.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 1.4rem 1.4rem;
-  vertical-align: middle;
-}
-.content-sum {
-  padding: 1rem;
-  text-align: center;
-}
-/* 歌手区域 */
-.singer-content-item,
-.zhuanji-content-item,
-.gedan-content-item {
-  padding: 0.8rem;
-}
-.singer-content-item > span,
-.singer-content-item > img,
-.zhuanji-content-item > span,
-.zhuanji-content-item > img,
-.gedan-content-item > span,
-.gedan-content-item > img {
-  display: inline-block;
-  vertical-align: middle;
-}
-.singer-content-item > img,
-.zhuanji-content-item > img,
-.gedan-content-item > img {
-  width: 10rem;
-  height: 10rem;
-}
-.singer-content-item > span,
-.zhuanji-content-item > span,
-.gedan-content-item > span {
-  padding-left: 0.5rem;
-}
+<style src='../css/views/search.css' scoped>
 </style>

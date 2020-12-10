@@ -1,0 +1,84 @@
+.content-title {
+    
+    padding: 1rem 2rem;
+}
+.content-title>*{
+    display: inline-block;
+    vertical-align: middle;
+}
+.content-title>span:first-child{
+    padding-right: 0.5rem;
+}
+.icon-sanjiao{
+    transition: transform 0.3s ease-in-out; 
+    transform: rotate(90deg);
+}
+.icon-sanjiao:before{
+    color: gray;
+    font-size: 0.1rem !important;
+}
+.content-btns {
+    height: 5rem;
+    padding: 0 0.5rem;
+    cursor: pointer;
+}
+
+.content-btns span,
+.content-btns img {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 5rem;
+}
+
+.content-btns img {
+    width: 1.4rem;
+    height: 1.4rem;
+    margin-right: 0.5rem;
+}
+
+.content-playlists-item{
+    display: block;
+    line-height: 3rem;
+    padding: 0 0.5rem;
+}
+.content-playlists-item>img,
+.content-playlists-item>span{
+    display: inline-block;
+    vertical-align: middle;
+}
+.content-playlists-item>span{
+    width: calc(100% - 1.4rem);
+    padding-left: 0.5rem;
+}
+.content-playlists-item>img{
+    width: 1.4rem;
+    height:1.4rem;
+}
+.heart{
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 1rem;
+    border: 1px solid #999999;
+    border-radius: 5rem;
+    line-height: normal;
+    text-align: center;
+    
+}
+.heart-shandong{
+    animation: shandong 0.5s ease-in-out infinite;
+}
+.heart>span:before{
+    font-size: 2rem;
+}
+
+@keyframes shandong {
+    0% {
+      color: red;
+    }
+    50% {
+      color: rgb(0, 191, 255);
+    }
+    100% {
+      color: red;
+    }
+  }

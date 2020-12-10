@@ -3,32 +3,31 @@
     <el-tabs v-model="activeTab" @tab-click="handleClick">
       <el-tab-pane label="个性推荐" name="recommend">
         <div class="recommend-banner">
-      <el-carousel :interval="4000" type="card" height="18rem">
-        <el-carousel-item v-for="(item, i) of bannerList" :key="i">
-          <img v-lazy="item.imageUrl" />
-        </el-carousel-item>
-      </el-carousel>
-    </div>
-    <!-- 推荐歌单 -->
-    <div class="recommend-title">推荐歌单</div>
-    <playlists-component
-      :playLists="rePlayList"
-      :playListShow="playListShow.recommend"
-       idKey="id"
-       playCountKey="playcount"
-       imgKey="picUrl"
-       nameKey="name"
-    ></playlists-component>
+          <el-carousel :interval="4000" type="card" height="18rem">
+            <el-carousel-item v-for="(item, i) of bannerList" :key="i">
+              <img v-lazy="item.imageUrl" />
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+        <!-- 推荐歌单 -->
+        <div class="recommend-title">推荐歌单</div>
+        <playlists-component
+          :playLists="rePlayList"
+          :playListShow="playListShow.recommend"
+          idKey="id"
+          playCountKey="playcount"
+          imgKey="picUrl"
+          nameKey="name"
+        ></playlists-component>
       </el-tab-pane>
-        <el-tab-pane label="歌单" name="playlists">
-          <recommend-playLists></recommend-playLists>
-        </el-tab-pane>
-        <el-tab-pane label="电台" name="broad"></el-tab-pane>
-        <el-tab-pane label="排行榜" name="rank"></el-tab-pane>
-        <el-tab-pane label="歌手" name="singer"></el-tab-pane>
-        <el-tab-pane label="最新音乐" name="newsongs"></el-tab-pane>
+      <el-tab-pane label="歌单" name="playlists">
+        <recommend-playLists></recommend-playLists>
+      </el-tab-pane>
+      <el-tab-pane label="电台" name="broad"></el-tab-pane>
+      <el-tab-pane label="排行榜" name="rank"></el-tab-pane>
+      <el-tab-pane label="歌手" name="singer"></el-tab-pane>
+      <el-tab-pane label="最新音乐" name="newsongs"></el-tab-pane>
     </el-tabs>
-    
   </div>
 </template>
 
@@ -40,10 +39,11 @@ export default {
     return {
       bannerList: [],
       rePlayList: [], //推荐歌单
-      activeTab:"recommend",//当前tab页
-      playListShow: {//歌单是否已经淡入出现
-        recommend:false,//推荐歌单
-      }, 
+      activeTab: "recommend", //当前tab页
+      playListShow: {
+        //歌单是否已经淡入出现
+        recommend: false, //推荐歌单
+      },
     };
   },
   created() {
@@ -93,98 +93,14 @@ export default {
         });
     },
     //切换tab页触发事件
-    handleClick(){
-
-    }
+    handleClick() {},
   },
   components: {
     playlistsComponent,
-    recommendPlayLists
+    recommendPlayLists,
   },
 };
 </script>
 
-<style scoped>
-@media screen and (min-width: 1921px) {
-  .recommend-playlist-item {
-    width: 12.5%;
-    padding: 0 calc(6.25% - 5rem);
-  }
-}
-@media screen and (min-width: 1601px) and (max-width: 1920px) {
-  .recommend-playlist-item {
-    width: 12.5%;
-    padding: 0 calc(6.25% - 5rem);
-  }
-}
-@media screen and (min-width: 1367px) and (max-width: 1600px) {
-  .recommend-playlist-item {
-    width: 16.666%;
-    padding: 0 calc(8.333% - 5rem);
-  }
-}
-@media screen and (min-width: 1025px) and (max-width: 1366px) {
-  .recommend-playlist-item {
-    width: 16.666%;
-    padding: 0 calc(8.333% - 5rem);
-  }
-}
-/* 平板尺寸 */
-@media screen and (min-width: 768px) and (max-width: 1023px) {
-  .recommend-playlist-item {
-    width: 25%;
-    padding: 0 calc(12.5% - 5rem);
-  }
-}
-@media screen and (min-width: 450px) and (max-width: 767px) {
-  .recommend-playlist-item {
-    width: 33.3333%;
-    padding: 0 calc(16.6665% - 5rem);
-  }
-}
-@media screen and (max-width: 449px) {
-  .recommend-playlist-item {
-    width: 50%;
-    padding: 0 calc(25% - 5rem);
-  }
-}
-.content {
-  height: 100%;
-  padding: 1.5rem;
-  padding-bottom: 0;
-  overflow: auto;
-}
-.recommend-banner {
-  height: 18rem;
-  padding: 0 6rem;
-}
-.recommend-banner img {
-  width: 100%;
-  height: 100%;
-}
-.recommend-playlist {
-  padding: 2rem 0;
-}
-.recommend-playlist-item {
-  float: left;
-  height: 15rem;
-  padding-bottom: 1rem;
-  cursor: pointer;
-}
-.recommend-playlist-item img {
-  width: 100%;
-  height: 10rem;
-  border-radius: 0.4rem;
-}
-.recommend-playlist-item span {
-  display: block;
-  height: 4rem;
-  overflow: hidden;
-}
-.recommend-title {
-  border-bottom: 1px solid #e3e3e3;
-  padding: 0.5rem;
-  padding-top: 0;
-  font-size: 1.5rem;
-}
+<style src='../css/views/recommend.css' scoped>
 </style>

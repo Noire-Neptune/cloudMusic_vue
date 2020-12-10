@@ -115,10 +115,13 @@
             <img
               class="commentReplied-content-comments-item-userImg"
               v-lazy="item.user.avatarUrl"
+              @click="linkToUserPage(item.user.userId)"
             />
             <div class="commentReplied-content-comments-item-userComment">
               <div>
-                <span class="nickname">{{ item.user.nickname }} :&nbsp;</span>
+                <span class="nickname" @click="linkToUserPage(item.user.userId)"
+                  >{{ item.user.nickname }} :&nbsp;</span
+                >
                 <span class="commentContent">{{ item.content }}</span>
               </div>
               <div
@@ -475,6 +478,7 @@ export default {
   width: 3rem;
   height: 3rem;
   border-radius: 3rem;
+  cursor: pointer;
 }
 .comment-content-comments-item-userComment {
   width: calc(100% - 3rem);
@@ -483,6 +487,7 @@ export default {
 }
 .comment-content-comments-item-userComment .nickname {
   color: #409eff;
+  cursor: pointer;
 }
 .comment-content-comments-item-userComment-op {
   margin-top: 0.5rem;
@@ -593,6 +598,7 @@ export default {
   width: 3rem;
   height: 3rem;
   border-radius: 3rem;
+  cursor: pointer;
 }
 .commentReplied-content-comments-item-userComment {
   width: calc(100% - 3rem);
@@ -600,6 +606,7 @@ export default {
 }
 .commentReplied-content-comments-item-userComment .nickname {
   color: #409eff;
+  cursor: pointer;
 }
 .commentReplied-content-comments-item-userComment-op {
   margin-top: 0.5rem;

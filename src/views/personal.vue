@@ -1,9 +1,16 @@
 <template>
   <div class="content">
-     <preview-image-component  ref="preview"></preview-image-component>
-    <div class="personalMsg-content" >
-      <div class="personalMsg-content-backgroundImage" :style="{backgroundImage:`url(${personalMsg.backgroundUrl})`}"></div>
-      <img class="personalMsg-content-touxiang" v-lazy="personalMsg.avatarUrl" @click="preview" />
+    <preview-image-component ref="preview"></preview-image-component>
+    <div class="personalMsg-content">
+      <div
+        class="personalMsg-content-backgroundImage"
+        :style="{ backgroundImage: `url(${personalMsg.backgroundUrl})` }"
+      ></div>
+      <img
+        class="personalMsg-content-touxiang"
+        v-lazy="personalMsg.avatarUrl"
+        @click="preview"
+      />
       <div class="personalMsg-content-detail">
         <div class="personalMsg-content-detail-title">
           <span class="personalMsg-content-detail-title-name">{{
@@ -34,9 +41,9 @@
       :playLists="createdPlayList"
       :playListShow="playListShow"
       idKey="id"
-       playCountKey="playCount"
-       imgKey="coverImgUrl"
-       nameKey="name"
+      playCountKey="playCount"
+      imgKey="coverImgUrl"
+      nameKey="name"
     ></playlists-component>
     <!-- 收藏的歌单 -->
     <div class="personalMsg-content-detail-title">
@@ -45,12 +52,11 @@
     <playlists-component
       :playLists="favoritePlayList"
       :playListShow="playListShow"
-       idKey="id"
-       playCountKey="playCount"
-       imgKey="coverImgUrl"
-       nameKey="name"
+      idKey="id"
+      playCountKey="playCount"
+      imgKey="coverImgUrl"
+      nameKey="name"
     ></playlists-component>
-   
   </div>
 </template>
 
@@ -122,9 +128,9 @@ export default {
           console.log(err);
         });
     },
-    preview(){
-      this.$refs.preview.show(this.personalMsg.avatarUrl)
-    }
+    preview() {
+      this.$refs.preview.show(this.personalMsg.avatarUrl);
+    },
   },
   watch: {
     $route(to, from) {
@@ -140,66 +146,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.content {
-  padding: 1.5rem;
-  height: 100%;
-  overflow: auto;
-}
-.personalMsg-content {
-  height: 20rem;
- position: relative;
-}
-.personalMsg-content-backgroundImage{
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  background-color: rgba(255,255,255,0.5);
-   background-repeat: no-repeat;
-  background-size: cover;
-  
-  background-position: center;
-
-}
-.personalMsg-content-touxiang,
-.personalMsg-content-detail {
-  display: inline-block;
-  vertical-align: middle;
-}
-.personalMsg-content-touxiang {
-  width: 15rem;
-  height: auto;
-  border-radius: 50%;
-  transform: scale(0.75, 0.75);
-}
-.personalMsg-content-detail {
-  width: calc(100% - 15rem);
-  padding: 1rem;
-  height: 100%;
-}
-.personalMsg-content-detail-title {
-  border-bottom: 1px solid #e3e3e3;
-  padding: 0.5rem;
-  padding-top: 0;
-}
-.personalMsg-content-detail-title-name {
-  font-size: 1.5rem;
-}
-.personalMsg-content-detail-data {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-}
-.personalMsg-content-detail-data > div {
-  width: 33.333%;
-  text-align: center;
-}
-.personalMsg-content-detail-data > div p {
-  font-size: 1.2rem;
-}
-.personalMsg-content-detail-data > div:not(:last-child) {
-  border-right: 1px solid #e3e3e3;
-}
-</style>
+<style src='../css/views/personal.css' scoped></style>

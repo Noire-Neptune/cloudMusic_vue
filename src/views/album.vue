@@ -1,9 +1,6 @@
 <template>
-  <div
-    class="content"
-   
-  >
-  <!--  :style="{height: (loading ? `${contentHeight}px` : `auto`),overflow: loading ? `hidden` : `auto`}" -->
+  <div class="content">
+    <!--  :style="{height: (loading ? `${contentHeight}px` : `auto`),overflow: loading ? `hidden` : `auto`}" -->
     <play-table
       :musicId="musicId"
       :songListRes="songListRes"
@@ -24,38 +21,38 @@ export default {
     return {
       songListRes: [],
       albumId: "", //专辑id
-      isGeDan:true,//是否为歌单/专辑页
+      isGeDan: true, //是否为歌单/专辑页
     };
   },
   created() {},
   mounted() {
-          this.isGeDan="zhuanji"
-          this.getPlayRes();
-       
+    this.isGeDan = "zhuanji";
+    this.getPlayRes();
   },
   methods: {
     //获取专辑歌曲详情(即歌曲的id集合)
     getPlayRes() {
       this.albumId = this.$route.query.id;
       this.$refs.loading.show();
-      this.g.axios({
-        url: this.g.host + "/album",
-        params: {
-          id: this.albumId,
-        },
-      })
+      this.g
+        .axios({
+          url: this.g.host + "/album",
+          params: {
+            id: this.albumId,
+          },
+        })
         .then((res) => {
           console.log("专辑页", res);
           //组织传到歌单组件的参数
-          this.songListRes ={
-            coverImgUrl:res.data.album.picUrl,//封面
-            name:res.data.album.name,//名称
-            description:res.data.album.description,//介绍
-            trackIds:res.data.songs
+          this.songListRes = {
+            coverImgUrl: res.data.album.picUrl, //封面
+            name: res.data.album.name, //名称
+            description: res.data.album.description, //介绍
+            trackIds: res.data.songs,
           };
         })
         .catch((err) => {
-           this.$refs.loading.hide();
+          this.$refs.loading.hide();
           console.log(err);
         });
     },
@@ -66,7 +63,7 @@ export default {
     songList(songList) {
       this.$emit("songList", songList);
     },
-     hideLoading(){
+    hideLoading() {
       this.$refs.loading.hide();
     },
   },
@@ -75,7 +72,7 @@ export default {
       //监听路由是否变化
       if (to.query.id != from.query.id) {
         //如果传来歌单id则表示是搜索歌单,否则就是每日推荐
-          this.getPlayRes();
+        this.getPlayRes();
       }
     },
   },
@@ -85,10 +82,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.content {
-  padding: 1.5rem;
-  height: 100% !important;
-  overflow: auto;
-}
-</style>
+<style src='../css/views/album.css' scoped></style>
