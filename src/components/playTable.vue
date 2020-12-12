@@ -3,7 +3,7 @@
     <preview-image-component ref="preview"></preview-image-component>
     <div class="playlist">
       <!-- 歌单封面,介绍区域 -->
-      <div class="playlist-titleContent clearfix" v-if="isGeDanShow">
+      <!-- <div class="playlist-titleContent clearfix" v-if="isGeDanShow">
         <div
           class="maoboli"
           :style="{ backgroundImage: 'url(' + playTitle.img + ')' }"
@@ -37,7 +37,7 @@
           </div>
           <div>{{ playTitle.description }}</div>
         </div>
-      </div>
+      </div> -->
       <div class="playlist-list">
         <!-- 歌曲列表按钮区域(搜索,排序等) -->
         <div class="play-list-setting clearfix">

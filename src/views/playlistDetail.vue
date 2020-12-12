@@ -1,6 +1,9 @@
 <template>
   <div class="content">
     <!--  :style="{height: (loading ? `${contentHeight}px` : `auto`),overflow: loading ? `hidden` : `auto`}" -->
+    <playlist-introduce-component
+      :introduceMsg="introduceMsg"
+    ></playlist-introduce-component>
     <play-table
       :musicId="musicId"
       :songListRes="songListRes"
@@ -15,13 +18,15 @@
 
 <script>
 import playTable from "../components/playTable.vue";
+import playlistIntroduceComponent from "../components/playlistIntroduceComponent.vue";
 export default {
   props: ["musicId", "contentHeight"],
   data() {
     return {
       songListRes: [],
       playListId: "", //歌单id
-      isGeDan: true, //是否为歌单
+      isGeDan: true, //是否为歌单,
+      introduceMsg: {}, //歌单介绍信息
     };
   },
   created() {},
@@ -49,6 +54,25 @@ export default {
           console.log("歌单页", res);
           this.isGeDan = true;
           this.songListRes = res.data.playlist;
+          let isCollected = false;
+          for (let item of this.g.userPlayListIds) {
+            //查找该歌单是否收藏
+            if (item == this.playListId) {
+              isCollected = true;
+              break;
+            }
+          }
+          this.introduceMsg = {
+            id: this.playListId, //歌单id
+            img: res.data.playlist.coverImgUrl, //封面
+            name: res.data.playlist.name, //名称
+            createTime: new Date(res.data.playlist.createTime), //创建时间
+            description: res.data.playlist.description, //介绍
+            creatorNickName: res.data.playlist.creator.nickname, //创建者昵称
+            creatorImg: res.data.playlist.creator.avatarUrl, //创建者头像
+            creatorId: res.data.playlist.creator.userId, //创建者用户id
+            isCollected: isCollected, //歌单的收藏状态
+          };
         })
         .catch((err) => {
           this.$refs.loading.hide();
@@ -98,6 +122,7 @@ export default {
   },
   components: {
     playTable,
+    playlistIntroduceComponent,
   },
 };
 </script>

@@ -22,7 +22,6 @@
         <img src="../img/dailyRecommend.png" /><span>每日推荐</span>
       </div>
     </router-link>
-    
 
     <div class="content-title">
       <span>创建的歌单</span
@@ -43,8 +42,18 @@
         :to="{ path: '/playlistDetail', query: { id: item.id } }"
       >
         <img src="../img/playlist.png" alt="歌单" />
-        <span :style="{width: i==0 ? 'calc(100% - 6rem)' : 'calc(100% - 1.4rem)'}">{{ item.name }}</span>
-        <div v-if="i==0" class="heart" @click="enterHeart(item.id,$event)" :class="{'heart-shandong' : heartModel}">
+        <span
+          :style="{
+            width: i == 0 ? 'calc(100% - 6rem)' : 'calc(100% - 1.4rem)',
+          }"
+          >{{ item.name }}</span
+        >
+        <div
+          v-if="i == 0"
+          class="heart"
+          @click="enterHeart(item.id, $event)"
+          :class="{ 'heart-shandong': heartModel }"
+        >
           <span class="iconfont icon-huaban"></span>
         </div>
       </router-link>
@@ -83,8 +92,8 @@ export default {
       collectPlaylists: [], //收藏的歌单
       packUpCreate: false, //收起创建的歌单状态,false为未收起
       packUpFav: false, //收起收藏的歌单状态,false为未收起
-      heartModel:false,//心动模式是否开启
-      heartPlaylist:[],//心动模式歌曲
+      heartModel: false, //心动模式是否开启
+      heartPlaylist: [], //心动模式歌曲
     };
   },
   mounted() {
@@ -131,24 +140,31 @@ export default {
     openFav() {
       this.packUpFav = !this.packUpFav;
     },
-    enterHeart(favlistId,e){//心动模式,参数始终为喜欢的音乐的歌单id
-    e.preventDefault()
-    this.heartModel=!this.heartModel;
+    enterHeart(favlistId, e) {
+      //心动模式,参数始终为喜欢的音乐的歌单id
+      e.preventDefault();
+      this.heartModel = !this.heartModel;
       this.g
         .axios({
           url: "/playmode/intelligence/list",
           params: {
-            id: this.g.music.id,//当前歌曲id
-            pid:favlistId
+            id: favlistId, //当前歌曲id(这里传的是歌单id,无论对还是不对都能获取到值, 并且值不同获取的内容还差不多是一样的)
+            pid: favlistId, //歌单id
           },
         })
         .then((res) => {
           console.log("心动模式歌单", res);
-          for(let item of res.data.data){
-             this.heartPlaylist.push(item.songInfo)
+          for (let item of res.data.data) {
+            this.heartPlaylist.push(item.songInfo);
           }
           this.$emit("songList", this.heartPlaylist);
-          this.$emit("songMsg", this.heartPlaylist[0].id, this.heartPlaylist[0].ar, this.heartPlaylist[0].al.name, 0);
+          this.$emit(
+            "songMsg",
+            this.heartPlaylist[0].id,
+            this.heartPlaylist[0].ar,
+            this.heartPlaylist[0].al.name,
+            0
+          );
         })
         .catch((err) => {
           console.log(err);
