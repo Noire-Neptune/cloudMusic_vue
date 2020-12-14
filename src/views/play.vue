@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content" ref="content" @scroll="loadComment">
     <div class="music-content clearfix">
       <!-- 歌曲标题 -->
       <div class="music-content-title" ref="title">
@@ -74,23 +74,84 @@
       class="commentCon"
       :style="{ top: mobileCommentsShow ? '10rem' : '100%' }"
     >
-      <div class="commentCom-cancel">
+      <!-- 手机端展示的评论区域关闭按钮 -->
+      <!-- <div class="commentCom-cancel">
         <span class="el-icon-close" @click="showOrHideComments"></span>
-      </div>
-      <comment-and-similar
+      </div> -->
+      <!-- <comment-and-similar
         class="commentComp"
         :class="{ onlySimilarShow: mobileSimShow }"
         :id="musicId"
-        :enableComment="true"
         type="0"
         @similarSong="getsongMsg"
-      ></comment-and-similar>
+      ></comment-and-similar> -->
+      <comment-component
+        class="comment-comp"
+        ref="comment"
+        :class="{ onlySimilarShow: mobileSimShow }"
+        :id="musicId"
+        type="0"
+        @getCommentId="getCommentId"
+      ></comment-component>
+      <!-- 相似歌曲 -->
+      <div class="similar-content">
+        <div class="comment-content-title">
+          <span>相似的歌曲</span>
+        </div>
+        <div class="similar-songs">
+          <div
+            class="similar-songs-item clearfix"
+            v-for="(item, i) of similarSongs"
+            :key="i"
+            @click="
+              playSimilarSong(
+                item.id,
+                item.artists,
+                item.album.name,
+                0,
+                item.name,
+                item.album.picUrl
+              )
+            "
+          >
+            <img v-lazy="item.album.picUrl" alt="相似音乐图片" />
+            <div class="similar-songs-item-msg">
+              <div>{{ item.name }}</div>
+              <div>
+                <span
+                  class="playlist-list-singer"
+                  v-for="(itemj, j) of item.artists"
+                  :key="j"
+                  >{{ itemj.name }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <!-- 评论回复内容区域 -->
+    <el-drawer
+      :visible.sync="drawer"
+      size="70%"
+      direction="btt"
+      custom-class="comment-drawer"
+      @opened="drawerOpen"
+    >
+      <comment-component
+        ref="replyComment"
+        :id="musicId"
+        type="0"
+        :commentId="commentId"
+        :isReply="true"
+      ></comment-component>
+    </el-drawer>
   </div>
 </template>
 
 <script>
-import commentAndSimilar from "../components/commentAndSimilar.vue";
+// import commentAndSimilar from "../components/commentAndSimilar.vue";
+import commentComponent from "../components/commentComponent.vue";
 export default {
   props: ["fm", "isPlay"], //fm标识,歌曲是否正在播放
   data() {
@@ -113,9 +174,18 @@ export default {
       mobileLyricsShow: false, //移动模式下是否显示歌词
       mobileCommentsShow: false, //移动模式下是否显示评论
       mobileSimShow: false, //移动模式下是否显示相似歌曲
+      t: {
+        //防抖定时器
+        commet: "",
+        reply: "",
+      },
+      similarSongs: [], //相似歌曲
+      drawer: false, //评论回复抽屉的打开状态
+      commentId: 0, //评论id
     };
   },
-  created() {
+  created() {},
+  mounted() {
     if (this.g.music.id) {
       this.refresh();
     }
@@ -123,8 +193,9 @@ export default {
     if (this.$route.query.fm) {
       this.getFMs();
     }
+    // 获取相似歌曲
+    this.getSimilarSongs(this.musicId);
   },
-  mounted() {},
   methods: {
     //用户点击要播放的音乐时,触发该方法, 刷新该页面
     refresh() {
@@ -133,6 +204,7 @@ export default {
       this.msg = this.g.music.msg;
       // 歌曲id
       this.musicId = this.g.music.id;
+      console.log(this.musicId);
       //获取歌词
       this.getGeci(this.musicId);
       //获取歌曲评论
@@ -143,7 +215,7 @@ export default {
       //获取列表评论,默认第一页
       // this.getDiscuss(this.g.music.id, 0, "", this.pageSize);
       // // 获取相似歌曲
-      // this.getSimilarSongs(this.g.music.id);
+      this.getSimilarSongs(this.g.music.id);
       //vue 容器渲染完成触发
       this.$nextTick(() => {
         //计算歌词标题区域高度
@@ -184,43 +256,6 @@ export default {
           }
           this.FMArr = this.FMArr.concat(arr);
           this.$emit("songList", this.FMArr, this.fm ? this.fm : 1);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    //获取歌曲评论 op为操作,判断调用该方法获取评论是为了渲染弹幕还是评论,为空则获取评论
-    getDiscuss(id, offset, op, limit, before) {
-      this.g
-        .axios({
-          url: this.g.host + "/comment/music",
-          params: {
-            id: id,
-            offset: offset, //用于分页 , 如 :( 评论页数 -1)*20
-            limit: limit, //一页数量,最多100,默认20
-            before: before, //取上一页最后一条的time,取超过100条评论时用,但是貌似没什么卵用
-          },
-        })
-        .then((res) => {
-          console.log("歌曲评论", res);
-          var list = res.data.comments;
-          this.commentSum = res.data.total;
-          this.pageCount = Math.ceil(this.commentSum / this.pageSize);
-          if (op == "danmu") {
-            this.danmuList = this.danmuList.concat(list);
-            this.$nextTick(() => {
-              this.initDanmu();
-            });
-          } else {
-            this.comments = list;
-          }
-          //一次性获取所有评论
-          // if(this.comments.length>=res.data.total){
-          //   console.log("得到所有评论",this.comments)
-          // }else{
-          //   this.offset+=100;
-          //  this.getDiscuss(id,this.offset,100,list[list.length-1].time)
-          // }
         })
         .catch((err) => {
           console.log(err);
@@ -340,7 +375,14 @@ export default {
     //播放相似的歌曲
     playSimilarSong(id, singer, zhuanji, index, name, pic) {
       var similarMsg = { name: name, pic: pic };
-      this.$emit("songMsg", id, singer, zhuanji, index, similarMsg);
+      this.$store.commit("setMusicMsg", {
+        id: id,
+        singer: singer,
+        zhuanji: zhuanji,
+        index: index,
+        similarMsg: similarMsg,
+      });
+      // this.$emit("songMsg", id, singer, zhuanji, index, similarMsg);
     },
     //点赞 评论id,是否点赞
     dianzan(commentId, liked, $event) {
@@ -430,6 +472,21 @@ export default {
       this.mobileCommentsShow = true;
       this.mobileSimShow = true;
     },
+    //滚动加载评论,滚动事件的方法
+    loadComment() {
+      this.t.commet && clearTimeout(this.t.commet);
+      var that = this;
+      this.t.commet = setTimeout(() => {
+        this.$refs.comment.scrollLoad(that.$refs.content);
+      }, 200);
+    },
+    //打开回复评论的抽屉
+    drawerOpen() {},
+    //歌曲评论组件点击查看回复后的事件,可获取评论id
+    getCommentId(commentId) {
+      this.drawer = true;
+      this.commentId = commentId;
+    },
     //时间戳返回年月日
     timeToStr(time) {
       var date = new Date(time);
@@ -484,7 +541,8 @@ export default {
     },
   },
   components: {
-    commentAndSimilar,
+    // commentAndSimilar,
+    commentComponent,
   },
 };
 </script>

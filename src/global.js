@@ -5,9 +5,6 @@ export default {
     host: "http://49.232.0.103:3000",
     cookie: "",
     loadingAllPageHeight: 0, //loading铺满index内的子路由的高度
-    getUserId: function (userId) {
-        this.userId = userId
-    },
     userId: "",
     //获取带歌曲信息,传到play页面,以显示歌曲的歌词,歌手,专辑,码率等信息
     getMusic: function (id, msg) {
@@ -58,7 +55,7 @@ export default {
             }
         }
     },
-    // 全局引入loading组件
+    // 全局引入组件
     install: function (Vue) {
         Vue.component('loadingComponent', loadingComponent);
         Vue.component('previewImageComponent', previewImageComponent);

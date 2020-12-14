@@ -30,7 +30,11 @@
       <el-switch v-model="darkModel" active-text="暗黑模式"> </el-switch>
     </div>
     <audio :src="song" autoplay ref="audio"></audio>
-    <left-navigation class="leftDrawer"  @songMsg="getplaylistSongMsg" @songList="getplaylistSongList"></left-navigation>
+    <left-navigation
+      class="leftDrawer"
+      @songMsg="getplaylistSongMsg"
+      @songList="getplaylistSongList"
+    ></left-navigation>
     <div
       class="play-tuijian"
       :style="{ height: drawerHeight + 'px' }"
@@ -227,45 +231,6 @@ export default {
     };
   },
   methods: {
-    //登录
-    // login() {
-    //   this.g
-    //     .axios({
-    //       method: "GET",
-    //       url: this.g.host + "/login/cellphone",
-    //       params: {
-    //         phone: this.phone,
-    //         password: this.pwd,
-    //       },
-    //     })
-    //     .then((res) => {
-    //       console.log(res);
-    //       if (res.status == 200) {
-    //         this.alertShow = "none";
-    //         //设置多个cookie值(由于网抑云的cookie始终设置无效,目前只能采用)
-    //         var cookie = res.data.cookie;
-    //         // cookie = cookie.split(" Path=/;");
-    //         // cookie.forEach((item, i) => {
-    //         //   if (item) {
-    //         //     document.cookie = item + " Path=/;";
-    //         //   }
-    //         // });
-
-    //         //document.cookie = "domain=" + document.domain;
-    //         this.g.cookie = res.data.cookie;
-    //         window.localStorage.setItem("cookie", cookie);
-    //         this.g.userId = res.data.profile.userId;
-    //         this.userId = this.g.userId;
-    //         console.log(this.g.userId);
-    //         window.localStorage.setItem("userId", this.g.userId);
-    //         this.getLikedList();
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
-
     //获取歌曲url,similarMsg为相似歌曲表示,其 comment为歌曲注释,name为歌名,在请求返回值的alias取到(只有相似歌曲才会用到)
     getSongUrl(id, singer, zhuanji, index, similarMsg) {
       console.log(id);
@@ -501,6 +466,17 @@ export default {
   watch: {
     darkModel() {
       this.$emit("getDarkModel", this.darkModel);
+    },
+    "$store.state.musicMsg"() {
+      let msg = this.$store.state.musicMsg;
+      console.log(msg);
+      this.getSongUrl(
+        msg.id,
+        msg.singer,
+        msg.zhuanji,
+        msg.index,
+        msg.similarMsg
+      );
     },
   },
   components: {

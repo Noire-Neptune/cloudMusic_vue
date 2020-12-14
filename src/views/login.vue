@@ -108,12 +108,13 @@ export default {
             // });
 
             //document.cookie = "domain=" + document.domain;
+            //this.$store.commit("setCookie", res.data.cookie);
             this.g.cookie = res.data.cookie;
             window.localStorage.setItem("cookie", cookie);
             this.g.userId = res.data.profile.userId;
             this.userId = this.g.userId;
-            console.log(this.g.userId);
-            window.localStorage.setItem("userId", this.g.userId);
+            console.log(this.userId);
+            window.localStorage.setItem("userId", this.userId);
             this.$router.push({
               path: "/",
             });

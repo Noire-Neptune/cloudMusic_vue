@@ -8,9 +8,9 @@ import elementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import cookie from 'vue-cookies';
 import loadingComponent from './global.js'
+import store from './store'
 // 引入图片懒加载
 import VueLazyload from 'vue-lazyload'
-
 Vue.use(VueLazyload, {
   preLoad: 1,
   loading: require('./img/loading.gif'),
@@ -23,9 +23,10 @@ Vue.prototype.axios = axios;
 axios.defaults.withCredentials = true;
 Vue.prototype.$cookie = cookie; //设置cookie
 Vue.prototype.g = g;
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')

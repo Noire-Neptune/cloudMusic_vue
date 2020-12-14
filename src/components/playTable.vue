@@ -298,7 +298,13 @@ export default {
     },
     //获取歌曲信息, 传给主页面,主页面请求后获取url进行播放
     getSong(id, singer, zhuanji, index) {
-      this.$emit("songMsg", id, singer, zhuanji, index);
+      this.$store.commit("setMusicMsg", {
+        id: id,
+        singer: singer,
+        zhuanji: zhuanji,
+        index: index,
+      });
+      //this.$emit("songMsg", id, singer, zhuanji, index);
     },
 
     //设置喜欢该音乐 likeStatus:请求之前的喜欢状态, id:歌曲id
