@@ -153,7 +153,7 @@ import { mapMutations } from "vuex";
 export default {
   //props的数据是单向的,vue不建议修改props的属性,会报错误
   /**
-   * songListRes:歌单数据的请求结果
+   * songListRes:歌单数据的请求结果,里面只有歌单相关信息,以及歌曲id的集合
    * isGeDan:是否为歌单/专辑, 歌单/专辑的请求结果和搜索歌曲的请求结果不同, 并且搜索歌曲时没有歌单标题,可能的值有:true:歌单, zhuanji:专辑, false:搜索等
    */
   props: ["songListRes", "isGeDan", "musicId"],

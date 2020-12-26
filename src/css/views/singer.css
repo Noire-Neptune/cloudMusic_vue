@@ -14,7 +14,8 @@
     height: 12rem;
     border-radius: 0.5rem;
 }
-.introduce{
+.introduce,
+.album-item-songCon{
     float: left;
     width: calc(100% - 12rem);
     padding-left: 1rem;
@@ -46,4 +47,19 @@
   .introduce-sum span{
     padding-right: 1rem;
   }
+ .album-item{
+     display: flex;
+     padding-bottom: 1rem;
+ }
+ .album-item-imgCon{
+    float: left;
+    width: 12rem;
+    text-align: center;
+ }
+ .album-item-imgCon img{
+     width: 12rem;
+     height: 12rem;
+     border-radius: 0.5rem;
+     margin-bottom: 0.5rem;
+ }
  

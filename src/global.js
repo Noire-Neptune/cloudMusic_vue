@@ -72,5 +72,13 @@ export default {
             (Math.floor(second % 60) >= 10
                 ? Math.floor(second % 60)
                 : "0" + Math.floor(second % 60));
+    },
+    // 时间戳转时间(2020.12.31)
+    getTimeStr(sjc) {
+        let time = new Date(sjc);
+        let y = time.getFullYear();
+        let m = time.getMonth() + 1 >= 10 ? time.getMonth() + 1 : '0' + (time.getMonth() + 1);
+        let d = time.getDate();
+        return `${y}-${m}-${d}`
     }
 }
