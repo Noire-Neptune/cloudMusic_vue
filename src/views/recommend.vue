@@ -19,6 +19,32 @@
           imgKey="picUrl"
           nameKey="name"
         ></playlists-component>
+        <div class="recommend-title">最新音乐</div>
+        <div class="recommend-newMusic">
+          <div
+            class="recommend-newMusic-item"
+            v-for="(item, i) of newMusicArr"
+            :key="i"
+            @click="play(item.id, item.artists, item.album.name, i)"
+          >
+            <img
+              class="recommend-newMusic-item-img"
+              v-lazy="item.picUrl"
+              alt="新音乐"
+            />
+            <div class="recommend-newMusic-item-msg">
+              <div class="recommend-newMusic-item-msg-title">
+                {{ item.name }}&nbsp;&nbsp;{{ item.alias.join() }}
+              </div>
+              <div class="recommend-newMusic-item-msg-singer">
+                <span v-for="(itemj, j) of item.artists" :key="j"
+                  >{{ itemj.name
+                  }}{{ j == item.artists.length - 1 ? "" : ", " }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
       </el-tab-pane>
       <el-tab-pane label="歌单" name="playlists">
         <recommend-playLists></recommend-playLists>
@@ -34,30 +60,35 @@
 <script>
 import playlistsComponent from "../components/playilistsComponent";
 import recommendPlayLists from "../components/recommend_playlists";
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
       bannerList: [],
       rePlayList: [], //推荐歌单
       activeTab: "recommend", //当前tab页
+      newMusicArr: [], //新音乐
       playListShow: {
         //歌单是否已经淡入出现
         recommend: false, //推荐歌单
       },
     };
   },
-  created() {
+  created() {},
+  mounted() {
     this.getBanner(() => {
       this.getRecommendPlayList(() => {
         var t = setTimeout(() => {
+          //宏任务
           this.playListShow.recommend = true;
           clearTimeout(t);
         }, 0);
       });
     });
+    this.getNewMusic();
   },
-  mounted() {},
   methods: {
+    ...mapMutations(["setMusicMsg"]),
     //获取推荐歌单
     getRecommendPlayList(success) {
       this.g
@@ -91,6 +122,34 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    //获取最新歌曲
+    getNewMusic() {
+      this.g
+        .axios({
+          url: "/personalized/newsong",
+        })
+        .then((res) => {
+          console.log("新音乐r", res);
+          //this.newMusicArr = res.data.banners;
+          let arr = [];
+          for (let item of res.data.result) {
+            arr.push({ ...{ picUrl: item.picUrl }, ...item.song });
+          }
+          console.log(arr);
+          this.newMusicArr = arr;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    play(id, singer, zhuanji, index) {
+      this.setMusicMsg({
+        id: id,
+        singer: singer,
+        zhuanji: zhuanji,
+        index: index,
+      });
     },
     //切换tab页触发事件
     handleClick() {},

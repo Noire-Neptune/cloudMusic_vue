@@ -65,5 +65,12 @@ export default {
     },
     p(val) {
         return JSON.parse(JSON.stringify(val))
+    },
+    secondToStr(second) {
+        return Math.floor(second / 60) +
+            ":" +
+            (Math.floor(second % 60) >= 10
+                ? Math.floor(second % 60)
+                : "0" + Math.floor(second % 60));
     }
 }

@@ -10,6 +10,7 @@ import Personal from './views/personal.vue' //个人信息
 import Album from './views/album.vue' //专辑页
 import Competitive from './views/competitive.vue' //精选歌单页
 import Login from './views/login.vue' //精选歌单页
+import Singer from './views/singer.vue' //精选歌单页
 Vue.use(VueRouter);
 //屏蔽路由重复的报错,对项目无影响
 const originalPush = VueRouter.prototype.push
@@ -60,6 +61,11 @@ export default new VueRouter({
             path: '/competitive',
             name: 'competitive',
             component: Competitive
+        },
+        {
+            path: '/singer',
+            name: 'singer',
+            component: Singer
         }
         ]
     }, {

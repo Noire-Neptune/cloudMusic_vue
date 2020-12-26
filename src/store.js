@@ -8,7 +8,8 @@ const store = new vuex.Store({//创建store对象,对象中存放可全局共享
     mutations: {
         setMusicMsg(state, payload) {
             state.musicMsg = payload
-        }
+        },
+
     }
 })
 export default store;

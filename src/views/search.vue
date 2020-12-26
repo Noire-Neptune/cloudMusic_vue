@@ -23,12 +23,12 @@
       <el-tab-pane label="歌手" name="singer">
         <div class="singer-content">
           <div class="content-sum">共找到{{ artist.artistCount }}位歌手</div>
-          <!-- 歌手界面暂未开发 -->
           <column-layout-component
             :data="artist.artistList"
             idField="id"
             imgField="picUrl"
-            enterUrl="/"
+            enterUrl="/singer"
+            oneLayoutType="1"
           ></column-layout-component>
         </div>
       </el-tab-pane>

@@ -1,0 +1,49 @@
+.content{
+    padding: 1.5rem;
+    height: 100%;
+    overflow: auto;
+}
+.singer{
+    display: flex;
+    height:12rem;
+    
+}
+.singer-img{
+    float: left;
+    width: 12rem;
+    height: 12rem;
+    border-radius: 0.5rem;
+}
+.introduce{
+    float: left;
+    width: calc(100% - 12rem);
+    padding-left: 1rem;
+}
+.introduce-title{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.introduce-title,.introduce-alias,.introduce-sum{
+    padding-bottom: 0.5rem;
+}
+.collectBtn {
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    border-radius: 3rem;
+    border: 1px solid red;
+    margin-bottom: 0.5rem;
+  }
+.collectBtn img {
+    width: 2rem;
+    height: 2rem;
+  }
+  .collectBtn img,.collectBtn span{
+      vertical-align: middle;
+  }
+  .collectBtn span{
+      padding-left: 1rem;
+  }
+  .introduce-sum span{
+    padding-right: 1rem;
+  }
+ 

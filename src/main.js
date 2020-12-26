@@ -4,7 +4,7 @@ import VueRouter from 'vue-router';
 import router from './router'
 import axios from 'axios';
 import g from './global.js'
-import elementUI from 'element-ui';
+import { Switch, Slider, Icon, Drawer, Carousel, TabPane, Tabs, CarouselItem } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import cookie from 'vue-cookies';
 import loadingComponent from './global.js'
@@ -17,7 +17,16 @@ Vue.use(VueLazyload, {
   attempt: 1
 })
 Vue.use(VueRouter);
-Vue.use(elementUI);
+//按需引入elementui组件-------------------------
+Vue.component(Switch.name, Switch)
+Vue.component(Slider.name, Slider)
+Vue.component(Icon.name, Icon)
+Vue.component(Drawer.name, Drawer)
+Vue.component(Carousel.name, Carousel)
+Vue.component(TabPane.name, TabPane)
+Vue.component(Tabs.name, Tabs);
+Vue.component(CarouselItem.name, CarouselItem)
+//--------------------------------------------
 Vue.use(loadingComponent)
 Vue.prototype.axios = axios;
 axios.defaults.withCredentials = true;

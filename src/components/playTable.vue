@@ -113,7 +113,7 @@
                 >
               </td>
               <td>{{ item.al.name }}</td>
-              <td></td>
+              <td>{{ g.secondToStr(Math.floor(item.dt / 1000)) }}</td>
             </tr>
           </tbody>
         </table>
@@ -149,6 +149,7 @@
 
 <script>
 import commentAndSimilar from "../components/commentAndSimilar.vue";
+import { mapMutations } from "vuex";
 export default {
   //props的数据是单向的,vue不建议修改props的属性,会报错误
   /**
@@ -180,6 +181,7 @@ export default {
     if (this.isGeDanShow) this.playListId = this.$route.query.id;
   },
   methods: {
+    ...mapMutations(["setMusicMsg"]),
     //获取音乐详情
     getPlayDetail() {
       var res = this.songListRes;
@@ -298,13 +300,12 @@ export default {
     },
     //获取歌曲信息, 传给主页面,主页面请求后获取url进行播放
     getSong(id, singer, zhuanji, index) {
-      this.$store.commit("setMusicMsg", {
+      this.setMusicMsg({
         id: id,
         singer: singer,
         zhuanji: zhuanji,
         index: index,
       });
-      //this.$emit("songMsg", id, singer, zhuanji, index);
     },
 
     //设置喜欢该音乐 likeStatus:请求之前的喜欢状态, id:歌曲id
@@ -452,6 +453,13 @@ export default {
         }
       }
     },
+  },
+  computed: {
+    // getSecond(s) {
+    //   return (s) => {
+    //     return this.g.secondToStr(s);
+    //   };
+    // },
   },
   components: {
     commentAndSimilar,

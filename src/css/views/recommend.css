@@ -94,3 +94,33 @@
     padding-top: 0;
     font-size: 1.5rem;
 }
+.recommend-newMusic{
+    padding: 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    flex-flow: wrap;
+}
+.recommend-newMusic-item{
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem 1rem 0;
+    height: 6rem;
+}
+.recommend-newMusic-item-img{
+    width: 5rem;
+    height: 100%;
+    border-radius: 5px;
+}
+.recommend-newMusic-item-msg{
+    width: calc(100% - 5rem);
+    height: 100%;
+    padding-left: 1rem;
+}
+.recommend-newMusic-item-msg-title,.recommend-newMusic-item-msg-singer{
+    height: 2.5rem;
+    line-height: 2.5rem;
+}
+.recommend-newMusic-item-msg-singer{
+    color: #999999;
+}
