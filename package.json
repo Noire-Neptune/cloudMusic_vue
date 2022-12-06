@@ -11,7 +11,7 @@
     "core-js": "^2.6.5",
     "element-ui": "^2.13.2",
     "lyric-parser": "^1.0.1",
-    "qs": "^6.9.4",
+    "qs": "^6.9.7",
     "vue": "^2.6.10",
     "vue-cookies": "^1.7.3",
     "vue-lazyload": "^1.3.3",
